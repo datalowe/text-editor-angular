@@ -43,3 +43,9 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# custom (added by me)
+scrapped_files/
+*.swp
+texteditor_quill_notes.md
+
