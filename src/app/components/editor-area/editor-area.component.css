@@ -1,3 +1,14 @@
 .custom-quill-editor {
     margin-bottom: 5rem;
 }
+
+.editor-toolbar {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    border-bottom-style: dotted;
+    border-width: 2px;
+    width: 100vw;
+    margin-bottom: 1rem;
+    background-color: #f9f9f9;
+}

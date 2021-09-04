@@ -6,13 +6,15 @@ import { AppComponent } from './app.component';
 
 import { QuillModule } from 'ngx-quill';
 import { EditorAreaComponent } from './components/editor-area/editor-area.component';
-import { ButtonComponent } from './components/button/button.component'
+import { ButtonComponent } from './components/button/button.component';
+import { EditorToolbarComponent } from './components/editor-toolbar/editor-toolbar.component'
 
 @NgModule({
   declarations: [
     AppComponent,
     EditorAreaComponent,
-    ButtonComponent
+    ButtonComponent,
+    EditorToolbarComponent
   ],
   imports: [
     BrowserModule,
