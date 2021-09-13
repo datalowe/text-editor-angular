@@ -3,12 +3,13 @@
 }
 
 .editor-toolbar {
-    display: flex;
-    flex-wrap: nowrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* flex-wrap: nowrap; */
     justify-content: space-around;
     border-bottom-style: dotted;
     border-width: 2px;
     width: 100vw;
     margin-bottom: 1rem;
-    background-color: #f9f9f9;
+    background-color: #6B2F45;
 }
