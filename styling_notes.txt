@@ -1,0 +1,6 @@
+Monochromatic color scheme:
+#6B2F45
+#6B4F59
+#B85176
+#EB6797
+#EEB0C7
