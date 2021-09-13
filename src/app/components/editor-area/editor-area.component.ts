@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { EditorChangeContent, EditorChangeSelection, QuillEditorComponent } from 'ngx-quill';
 
 import { Document } from 'src/app/Document';
+import { DocumentService } from 'src/app/services/document.service';
 
 @Component({
   selector: 'app-editor-area',
@@ -11,38 +12,32 @@ import { Document } from 'src/app/Document';
 export class EditorAreaComponent implements OnInit {
 
   @ViewChild('editor') editor: QuillEditorComponent; 
-  docId: string = '';
-  docTitle: string = '';
-  docBody: string = '';
-  content: string = '';
+  activeDoc: Document = {
+    _id: '',
+    title: '',
+    body: ''
+  }
 
-  constructor() { }
+  constructor(private documentService: DocumentService) { }
 
   ngOnInit(): void {
   }
 
-  ngAfterViewInit(): void {
-    console.log(this.editor);
-  }
-
   updateText(event: EditorChangeContent | EditorChangeSelection): void {
-    this.docBody = event['editor']['root']['innerText'];
+    this.activeDoc.body = event['editor']['root']['innerText'];
   }
 
   saveText(): void {
-    const saveDoc = {
-      _id: this.docId,
-      title: this.docTitle,
-      body: this.docBody
-    }
-    console.log(this.docBody);
+    this.documentService
+      .upsertDocument(this.activeDoc)
+      .subscribe(
+        (d) => (console.log(d))
+      );
   }
 
   changeDoc(document: Document): void {
-    this.docId = document._id;
-    this.docTitle = document.title;
-    this.docBody = document.body;
-    this.editor['quillEditor']['root']['innerText'] = this.docBody;
+    this.activeDoc = document;
+    this.editor['quillEditor']['root']['innerText'] = document.body;
   }
 
 }

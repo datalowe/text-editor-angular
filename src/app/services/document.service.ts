@@ -22,4 +22,26 @@ export class DocumentService {
   getDocuments(): Observable<Document[]> {
     return this.httpClient.get<Document[]>(this.apiUrl);
   }
+
+  upsertDocument(doc: Document): Observable<Document> {
+    if (doc._id === '') {
+      return this.createDocument(doc);
+    } 
+    return this.updateDocument(doc);
+  }
+
+  createDocument(doc: Document): Observable<Document> {
+    const createUrl = `${this.apiUrl}/create`;
+
+    return this.httpClient.post<Document>(createUrl, doc, httpOptions);
+  }
+
+  updateDocument(doc: Document): Observable<Document> {
+    const updateUrl = `${this.apiUrl}/update`;
+
+    console.log('foobar upsert' + updateUrl);
+    console.log(doc);
+
+    return this.httpClient.put<Document>(updateUrl, doc, httpOptions);
+  }
 }

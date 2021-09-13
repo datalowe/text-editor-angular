@@ -25,7 +25,6 @@ export class DocumentListComponent implements OnInit {
   }
 
   onClickDoc(document: Document): void {
-    console.log(document);
     this.onSelectDoc.emit(document);
   }
 }
