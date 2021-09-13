@@ -3,5 +3,6 @@
     list-style: none;
     display: grid;
     justify-content: center;
+    justify-items: center;
     grid-template-columns: 1fr;
 }

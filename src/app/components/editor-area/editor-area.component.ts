@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { EditorChangeContent, EditorChangeSelection } from 'ngx-quill';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { EditorChangeContent, EditorChangeSelection, QuillEditorComponent } from 'ngx-quill';
+
+import { Document } from 'src/app/Document';
 
 @Component({
   selector: 'app-editor-area',
@@ -8,19 +10,39 @@ import { EditorChangeContent, EditorChangeSelection } from 'ngx-quill';
 })
 export class EditorAreaComponent implements OnInit {
 
-  inputText: string = '';
+  @ViewChild('editor') editor: QuillEditorComponent; 
+  docId: string = '';
+  docTitle: string = '';
+  docBody: string = '';
+  content: string = '';
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  ngAfterViewInit(): void {
+    console.log(this.editor);
+  }
+
   updateText(event: EditorChangeContent | EditorChangeSelection): void {
-    this.inputText = event['editor']['root']['innerText'];
+    this.docBody = event['editor']['root']['innerText'];
   }
 
   saveText(): void {
-    console.log(this.inputText);
+    const saveDoc = {
+      _id: this.docId,
+      title: this.docTitle,
+      body: this.docBody
+    }
+    console.log(this.docBody);
+  }
+
+  changeDoc(document: Document): void {
+    this.docId = document._id;
+    this.docTitle = document.title;
+    this.docBody = document.body;
+    this.editor['quillEditor']['root']['innerText'] = this.docBody;
   }
 
 }

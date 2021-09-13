@@ -1,5 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
+import { Document } from 'src/app/Document';
+
 @Component({
   selector: 'app-editor-toolbar',
   templateUrl: './editor-toolbar.component.html',
@@ -8,6 +10,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 export class EditorToolbarComponent implements OnInit {
 
   @Output() saveSignal = new EventEmitter();
+  @Output() onChangeDoc = new EventEmitter();
 
   constructor() { }
 
@@ -16,6 +19,10 @@ export class EditorToolbarComponent implements OnInit {
 
   onSave(): void {
     this.saveSignal.emit();
+  }
+
+  changeDoc(document: Document): void {
+    this.onChangeDoc.emit(document);
   }
 
 }

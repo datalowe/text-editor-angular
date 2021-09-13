@@ -1,4 +1,8 @@
 <ul class="document-list-ul">
-    <app-document-list-item *ngFor="let doc of documents" [document]=doc ></app-document-list-item>
+    <app-document-list-item 
+        *ngFor="let doc of documents" 
+        [document]=doc
+        (click)="onClickDoc(doc)">
+    </app-document-list-item>
 </ul>
 

@@ -14,15 +14,8 @@ export class DocumentListItemComponent implements OnInit {
     body: ''
   }
 
-  @Output() onSelectDoc = new EventEmitter();
-
   constructor() { }
 
   ngOnInit(): void {
   }
-
-  onClick(): void {
-    this.onSelectDoc.emit(this.document);
-  }
-
 }

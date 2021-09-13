@@ -1,2 +1,6 @@
-<app-editor-toolbar class="editor-toolbar" (saveSignal)="saveText()"></app-editor-toolbar>
-<quill-editor class=custom-quill-editor (onEditorChanged)="updateText($event)"></quill-editor>
+<app-editor-toolbar 
+    class="editor-toolbar" 
+    (saveSignal)="saveText()"
+    (onChangeDoc)="changeDoc($event)">
+</app-editor-toolbar>
+<quill-editor #editor class=custom-quill-editor (onEditorChanged)="updateText($event)"></quill-editor>
