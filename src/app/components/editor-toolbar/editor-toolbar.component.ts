@@ -1,6 +1,8 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 import { Document } from 'src/app/Document';
+import { UiService } from 'src/app/services/ui.service';
 
 @Component({
   selector: 'app-editor-toolbar',
@@ -14,7 +16,16 @@ export class EditorToolbarComponent implements OnInit {
   @Output() onChangeDoc = new EventEmitter();
   @Output() onNewDoc = new EventEmitter();
 
-  constructor() { }
+  showDocList: boolean = false;
+  subscription: Subscription; 
+
+  constructor(private uiService: UiService) {
+    this.subscription = this.uiService
+      .onToggleDocList()
+      .subscribe(
+        (val) => (this.showDocList = val)
+    );
+  }
 
   ngOnInit(): void {
   }
@@ -29,5 +40,9 @@ export class EditorToolbarComponent implements OnInit {
 
   changeDoc(document: Document): void {
     this.onChangeDoc.emit(document);
+  }
+
+  toggleShowList(): void {
+    this.uiService.toggleShowDocList();
   }
 }

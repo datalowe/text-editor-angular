@@ -1,4 +1,24 @@
-<app-button class="btn-center" color="#EB6797" text="Save" (btnClick)="onSave()"></app-button>
-<app-button class="btn-center" color="#EB6797" text="New" (btnClick)="newDoc()"></app-button>
-<app-button class="btn-center" color="#EB6797" text="List" (btnClick)="onSave()"></app-button>
-<app-document-list class="document-list" [documents]="documents" (onSelectDoc)="changeDoc($event)"></app-document-list>
+<app-button 
+    class="btn-center" 
+    color="#EB6797" 
+    text="Save" 
+    (btnClick)="onSave()">
+</app-button>
+<app-button 
+    class="btn-center" 
+    color="#EB6797" 
+    text="New" 
+    (btnClick)="newDoc()">
+</app-button>
+<app-button 
+    class="btn-center" 
+    color="#EB6797" 
+    text="{{showDocList ? 'Close' : 'List'}}" 
+    (btnClick)="toggleShowList()">
+</app-button>
+<app-document-list 
+    *ngIf="showDocList" 
+    class="document-list" 
+    [documents]="documents" 
+    (onSelectDoc)="changeDoc($event)">
+</app-document-list>
