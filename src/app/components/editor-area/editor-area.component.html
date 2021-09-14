@@ -5,5 +5,5 @@
     (onChangeDoc)="changeDoc($event)"
     (onNewDoc)="newDoc()">
 </app-editor-toolbar>
-<input [(ngModel)]="activeDoc.title" id="title-input" class="document-title-field" placeholder="Document Title">
+<input [(ngModel)]="activeDoc.title" id="title-input" class="document-title-field" placeholder="Document Title" (keyup)="updateTitle($event)">
 <quill-editor #editor class=custom-quill-editor (onEditorChanged)="updateText($event)"></quill-editor>

@@ -38,7 +38,13 @@ export class EditorAreaComponent implements OnInit {
   }
 
   updateText(event: EditorChangeContent | EditorChangeSelection): void {
-    this.activeDoc.body = event['editor']['root']['innerText'];
+    this.documentService
+      .updateActiveBody(event['editor']['root']['innerText']);
+  }
+
+  updateTitle(event: any): void {
+    this.documentService
+      .updateActiveTitle(event.target.value);
   }
 
   saveText(): void {
@@ -69,7 +75,8 @@ export class EditorAreaComponent implements OnInit {
       .subscribe(
         (docs) => (this.savedDocs = docs)
     );
-    this.activeDoc = document;
+    this.documentService.swapActive(document);
+
     this.editor['quillEditor']['root']['innerText'] = document.body;
   }
 
