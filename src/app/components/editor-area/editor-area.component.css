@@ -4,7 +4,7 @@
 
 .editor-toolbar {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     /* flex-wrap: nowrap; */
     justify-content: space-around;
     border-bottom-style: dotted;

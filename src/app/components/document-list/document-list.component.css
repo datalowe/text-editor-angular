@@ -1,9 +1,9 @@
 .document-list-ul {
     text-decoration: none;
     list-style: none;
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    justify-items: center;
     grid-template-columns: 1fr;
     margin: 0;
     padding: 0;
