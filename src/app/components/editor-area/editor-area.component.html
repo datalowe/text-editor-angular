@@ -2,7 +2,8 @@
     class="editor-toolbar"
     [documents]="savedDocs"
     (saveSignal)="saveText()"
-    (onChangeDoc)="changeDoc($event)">
+    (onChangeDoc)="changeDoc($event)"
+    (onNewDoc)="newDoc()">
 </app-editor-toolbar>
 <input [(ngModel)]="activeDoc.title" id="title-input" class="document-title-field" placeholder="Document Title">
 <quill-editor #editor class=custom-quill-editor (onEditorChanged)="updateText($event)"></quill-editor>

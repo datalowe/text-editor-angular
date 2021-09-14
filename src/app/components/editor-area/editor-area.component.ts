@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { EditorChangeContent, EditorChangeSelection, QuillEditorComponent } from 'ngx-quill';
+import { Subscription } from 'rxjs';
 
 import { Document } from 'src/app/Document';
 import { DocumentService } from 'src/app/services/document.service';
@@ -13,13 +14,20 @@ export class EditorAreaComponent implements OnInit {
 
   @ViewChild('editor') editor: QuillEditorComponent;
   savedDocs: Document[] = [];
+  subscription: Subscription;
   activeDoc: Document = {
     _id: '',
     title: '',
     body: ''
-  }
+  };
 
-  constructor(private documentService: DocumentService) { }
+  constructor(private documentService: DocumentService) {
+    this.subscription = this.documentService
+      .onActiveDocUpdate()
+      .subscribe(
+        (d) => (this.activeDoc = d)
+      );
+   }
 
   ngOnInit(): void {
     this.documentService
@@ -39,7 +47,7 @@ export class EditorAreaComponent implements OnInit {
       return;
     }
     this.documentService
-      .upsertDocument(this.activeDoc)
+      .upsertDocument()
       .subscribe(
         (d) => {
           // check if document already was in saved docs. if so, update it.
@@ -57,12 +65,22 @@ export class EditorAreaComponent implements OnInit {
 
   changeDoc(document: Document): void {
     this.documentService
+      .getDocuments()
+      .subscribe(
+        (docs) => (this.savedDocs = docs)
+    );
+    this.activeDoc = document;
+    this.editor['quillEditor']['root']['innerText'] = document.body;
+  }
+
+  newDoc(): void {
+    this.documentService
     .getDocuments()
     .subscribe(
       (docs) => (this.savedDocs = docs)
     );
-    this.activeDoc = document;
-    this.editor['quillEditor']['root']['innerText'] = document.body;
+    this.documentService.resetActiveDoc();
+    this.editor['quillEditor']['root']['innerText'] = '';
   }
 
 }

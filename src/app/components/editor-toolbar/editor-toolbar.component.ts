@@ -12,6 +12,7 @@ export class EditorToolbarComponent implements OnInit {
   @Input() documents: Document[] = [];
   @Output() saveSignal = new EventEmitter();
   @Output() onChangeDoc = new EventEmitter();
+  @Output() onNewDoc = new EventEmitter();
 
   constructor() { }
 
@@ -22,8 +23,11 @@ export class EditorToolbarComponent implements OnInit {
     this.saveSignal.emit();
   }
 
+  newDoc(): void {
+    this.onNewDoc.emit();
+  }
+
   changeDoc(document: Document): void {
     this.onChangeDoc.emit(document);
   }
-
 }
