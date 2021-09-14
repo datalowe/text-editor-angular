@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 
 import { Document } from 'src/app/Document';
 
@@ -9,6 +9,7 @@ import { Document } from 'src/app/Document';
 })
 export class EditorToolbarComponent implements OnInit {
 
+  @Input() documents: Document[] = [];
   @Output() saveSignal = new EventEmitter();
   @Output() onChangeDoc = new EventEmitter();
 

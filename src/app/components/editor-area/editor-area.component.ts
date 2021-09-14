@@ -11,7 +11,8 @@ import { DocumentService } from 'src/app/services/document.service';
 })
 export class EditorAreaComponent implements OnInit {
 
-  @ViewChild('editor') editor: QuillEditorComponent; 
+  @ViewChild('editor') editor: QuillEditorComponent;
+  savedDocs: Document[] = [];
   activeDoc: Document = {
     _id: '',
     title: '',
@@ -21,6 +22,11 @@ export class EditorAreaComponent implements OnInit {
   constructor(private documentService: DocumentService) { }
 
   ngOnInit(): void {
+    this.documentService
+    .getDocuments()
+    .subscribe(
+      (docs) => (this.savedDocs = docs)
+    );
   }
 
   updateText(event: EditorChangeContent | EditorChangeSelection): void {
@@ -35,11 +41,26 @@ export class EditorAreaComponent implements OnInit {
     this.documentService
       .upsertDocument(this.activeDoc)
       .subscribe(
-        (d) => (console.log(d))
+        (d) => {
+          // check if document already was in saved docs. if so, update it.
+          // otherwise add it to array of saved docs.
+          const matchDoc = this.savedDocs.find(sD => sD._id === d._id);
+          if (matchDoc) {
+            matchDoc.title = d.title;
+            matchDoc.body = d.body;
+          } else {
+            this.savedDocs.push(d);
+          }
+        }
       );
   }
 
   changeDoc(document: Document): void {
+    this.documentService
+    .getDocuments()
+    .subscribe(
+      (docs) => (this.savedDocs = docs)
+    );
     this.activeDoc = document;
     this.editor['quillEditor']['root']['innerText'] = document.body;
   }
