@@ -32,8 +32,12 @@ export class DocumentService {
 
   createDocument(doc: Document): Observable<Document> {
     const createUrl = `${this.apiUrl}/create`;
+    const uploadObj = {
+      'title': doc.title,
+      'body': doc.body,
+    }
 
-    return this.httpClient.post<Document>(createUrl, doc, httpOptions);
+    return this.httpClient.post<Document>(createUrl, uploadObj, httpOptions);
   }
 
   updateDocument(doc: Document): Observable<Document> {

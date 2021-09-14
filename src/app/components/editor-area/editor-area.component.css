@@ -13,3 +13,14 @@
     margin-bottom: 1rem;
     background-color: #6B2F45;
 }
+
+.document-title-field {
+    background-color: #6B2F45;
+    color: #fefefe;
+    text-align: center;
+    border:none;
+    border-radius: 0.2rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+    padding: 0.2rem 0.5rem;
+}

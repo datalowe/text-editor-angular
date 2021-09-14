@@ -28,6 +28,10 @@ export class EditorAreaComponent implements OnInit {
   }
 
   saveText(): void {
+    if (!this.activeDoc.title) {
+      alert('Please add a title.')
+      return;
+    }
     this.documentService
       .upsertDocument(this.activeDoc)
       .subscribe(
