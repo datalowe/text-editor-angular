@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 
 import { Document } from 'src/app/Document';
 
-const httpOptions = {
+const sendHttpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
   })
@@ -31,21 +31,21 @@ export class DocumentService {
   }
 
   createDocument(doc: Document): Observable<Document> {
-    const createUrl = `${this.apiUrl}/create`;
     const uploadObj = {
       'title': doc.title,
       'body': doc.body,
     }
 
-    return this.httpClient.post<Document>(createUrl, uploadObj, httpOptions);
+    return this.httpClient.post<Document>(this.apiUrl, uploadObj, sendHttpOptions);
   }
 
   updateDocument(doc: Document): Observable<Document> {
-    const updateUrl = `${this.apiUrl}/update`;
+    const updateUrl = `${this.apiUrl}/${doc._id}`;
+    const uploadObj = {
+      'title': doc.title,
+      'body': doc.body,
+    }
 
-    console.log('foobar upsert' + updateUrl);
-    console.log(doc);
-
-    return this.httpClient.put<Document>(updateUrl, doc, httpOptions);
+    return this.httpClient.put<Document>(updateUrl, uploadObj, sendHttpOptions);
   }
 }
