@@ -2,6 +2,10 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
 
 import { EditorAreaComponent } from './editor-area.component';
+import { FormsModule } from '@angular/forms';
+import { EditorToolbarComponent } from '../editor-toolbar/editor-toolbar.component';
+import { ButtonComponent } from '../button/button.component';
+import { QuillEditorComponent } from 'ngx-quill';
 
 describe('EditorAreaComponent', () => {
   let component: EditorAreaComponent;
@@ -10,10 +14,14 @@ describe('EditorAreaComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        HttpClientModule
+        HttpClientModule,
+        FormsModule
       ],
       declarations: [ 
-        EditorAreaComponent 
+        EditorAreaComponent,
+        EditorToolbarComponent,
+        ButtonComponent,
+        QuillEditorComponent
       ]
     })
     .compileComponents();
