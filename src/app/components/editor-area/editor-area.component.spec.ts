@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientModule } from '@angular/common/http';
 
 import { EditorAreaComponent } from './editor-area.component';
 
@@ -8,7 +9,12 @@ describe('EditorAreaComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EditorAreaComponent ]
+      imports: [
+        HttpClientModule
+      ],
+      declarations: [ 
+        EditorAreaComponent 
+      ]
     })
     .compileComponents();
   });
