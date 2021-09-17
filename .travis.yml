@@ -5,10 +5,10 @@ node_js:
 addons:
   chrome: stable
 
-# cache:
-#   directories:
-#      - ./node_modules
-#      - /home/travis/.cache/Cypress
+cache:
+  directories:
+     - ./node_modules
+     - /home/travis/.cache/Cypress
 
 install:
   - npm install
