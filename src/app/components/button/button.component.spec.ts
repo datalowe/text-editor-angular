@@ -1,4 +1,5 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { first } from 'rxjs/operators';
 
 import { ButtonComponent } from './button.component';
 
@@ -22,4 +23,15 @@ describe('ButtonComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('raises the btnClick event when clicked', fakeAsync( () => {
+    spyOn(component.btnClick, 'emit');
+    const button = fixture.debugElement.nativeElement.querySelector('button');
+  
+    button.click()
+    tick(1);
+    expect(component.btnClick.emit).toHaveBeenCalled();
+
+  })
+  );
 });
