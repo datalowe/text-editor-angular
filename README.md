@@ -1,4 +1,7 @@
 # TextEditor: Angular
+[![Build Status](https://app.travis-ci.com/datalowe/text-editor-angular.svg?branch=main)](https://app.travis-ci.com/datalowe/text-editor-angular)
+[![Coverage Status](https://coveralls.io/repos/github/datalowe/text-editor-angular/badge.svg?branch=main)](https://coveralls.io/github/datalowe/text-editor-angular?branch=main)
+
 This is an [Angular](https://angular.io) project which uses the [Quill Editor](https://quilljs.com/). It's put together for a [JavaScript framework course](https://jsramverk.se) at Blekinge Institute of Technology.
 
 The app is very simple: It has a Quill editor which you can use as a regular text editor, and a 'save' button which currently just prints the editor contents to console.
