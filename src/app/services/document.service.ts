@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { empty, Observable, Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 import { Document } from 'src/app/Document';
 
