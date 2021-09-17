@@ -13,4 +13,9 @@ describe('UiService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('toggles showDocList value and makes subject emit event when toggleShowDocList is called', () => {
+    service.onToggleDocList().subscribe((showBool) => expect(showBool).toBeTruthy())
+    service.toggleShowDocList();
+  });
 });
