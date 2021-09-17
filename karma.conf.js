@@ -41,11 +41,11 @@ module.exports = function (config) {
     singleRun: false,
     restartOnFileChange: true,
     browsers: ['ChromeHeadlessCI'],
-customLaunchers: {
-  ChromeHeadlessCI: {
-    base: 'ChromeHeadless',
-    flags: ['--no-sandbox']
-  }
-},
+    customLaunchers: {
+      ChromeHeadlessCI: {
+        base: 'ChromeHeadless',
+        flags: ['--no-sandbox']
+      }
+    },
   });
 };
