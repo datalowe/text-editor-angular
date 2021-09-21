@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { EditorChangeContent, EditorChangeSelection, QuillEditorComponent } from 'ngx-quill';
+import { QuillEditorComponent } from 'ngx-quill';
 import { Subscription } from 'rxjs';
 
 import { Document } from 'src/app/Document';
@@ -37,9 +37,9 @@ export class EditorAreaComponent implements OnInit {
     );
   }
 
-  updateText(event: EditorChangeContent | EditorChangeSelection): void {
+  updateText(): void {
     this.documentService
-      .updateActiveBody(event['editor']['root']['innerHTML']);
+      .updateActiveBody(this.editor['quillEditor']['root']['innerHTML']);
   }
 
   updateTitle(event: any): void {
@@ -76,8 +76,6 @@ export class EditorAreaComponent implements OnInit {
         (docs) => (this.savedDocs = docs)
     );
     this.documentService.swapActive(document);
-
-    this.editor['quillEditor']['root']['innerHTML'] = document.body;
   }
 
   newDoc(): void {
