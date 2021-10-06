@@ -1,19 +1,21 @@
-<app-editor-toolbar 
-    class="editor-toolbar"
-    [documents]="savedDocs"
-    (saveSignal)="saveText()"
-    (onChangeDoc)="changeDoc($event)"
-    (onNewDoc)="newDoc()">
-</app-editor-toolbar>
-<input 
-    [(ngModel)]="activeDoc.title" 
-    id="title-input" 
-    class="document-title-field" 
-    placeholder="Document Title" 
-    (keyup)="updateTitle($event)">
-<quill-editor 
-    #editor 
-    [(ngModel)]="activeDoc.body"
-    class=custom-quill-editor 
-    (keyup)="updateText()">
-</quill-editor>
+<div class="editor-area-wrapper">
+    <app-editor-toolbar 
+        class="editor-toolbar"
+        [documents]="savedDocs"
+        (saveSignal)="saveText()"
+        (onChangeDoc)="changeDoc($event)"
+        (onNewDoc)="newDoc()">
+    </app-editor-toolbar>
+    <input 
+        [(ngModel)]="activeDoc.title" 
+        id="title-input" 
+        class="document-title-field" 
+        placeholder="Document Title" 
+        (keyup)="updateTitle($event)">
+    <quill-editor 
+        #editor 
+        [(ngModel)]="activeDoc.body"
+        class=custom-quill-editor 
+        (keyup)="updateText()">
+    </quill-editor>
+</div>

@@ -5,7 +5,7 @@ import { TextDocument } from 'src/app/TextDocument';
 @Component({
   selector: 'app-document-list-item',
   templateUrl: './document-list-item.component.html',
-  styleUrls: ['./document-list-item.component.css']
+  styleUrls: ['./document-list-item.component.scss']
 })
 export class DocumentListItemComponent implements OnInit {
   @Input() document: TextDocument = {

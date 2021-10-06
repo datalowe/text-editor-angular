@@ -8,7 +8,7 @@ import { DocumentService } from 'src/app/services/document.service';
 @Component({
   selector: 'app-editor-area',
   templateUrl: './editor-area.component.html',
-  styleUrls: ['./editor-area.component.css']
+  styleUrls: ['./editor-area.component.scss']
 })
 export class EditorAreaComponent implements OnInit {
 

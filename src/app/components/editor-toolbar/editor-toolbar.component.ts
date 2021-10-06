@@ -7,7 +7,7 @@ import { UiService } from 'src/app/services/ui.service';
 @Component({
   selector: 'app-editor-toolbar',
   templateUrl: './editor-toolbar.component.html',
-  styleUrls: ['./editor-toolbar.component.css']
+  styleUrls: ['./editor-toolbar.component.scss']
 })
 export class EditorToolbarComponent implements OnInit {
 

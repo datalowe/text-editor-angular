@@ -1,26 +1,26 @@
-import { Document } from 'src/app/Document';
+import { TextDocument } from 'src/app/TextDocument';
 
 const apiUrl = 'https://texted-backend-2.azurewebsites.net/editor-api/document';
 
-const presavedDoc1: Document = {
+const presavedDoc1: TextDocument = {
     _id: 'abcdefghijklmnopqrstuvwx',
     title: 'saved-title-1',
     body: 'saved-body-2'
 };
 
-const presavedDoc2: Document = {
+const presavedDoc2: TextDocument = {
     _id: '1bcdefghijklmnopqrstuvwx',
     title: 'saved-title-2',
     body: 'saved-body-2'
 };
 
-const newDoc1: Document = {
+const newDoc1: TextDocument = {
     _id: '',
     title: 'new-title-1',
     body: 'new-body-1'
 };
 
-const newDoc1WithGeneratedId: Document = {
+const newDoc1WithGeneratedId: TextDocument = {
     _id: 'nnndefghijklmnopqrstuvwx',
     title: 'new-title-1',
     body: 'new-body-1'
