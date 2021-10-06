@@ -26,77 +26,77 @@ const newDoc1WithGeneratedId: TextDocument = {
     body: 'new-body-1'
 };
 
-describe('preexisting documents', () => {
-    it('clicking list button retrieves documents from database and shows them', () => {
-        cy.intercept('GET', apiUrl, {
-            statusCode: 200,
-            body: [
-                presavedDoc1,
-                presavedDoc2
-            ]
-        });
+// describe('preexisting documents', () => {
+//     it('clicking list button retrieves documents from database and shows them', () => {
+//         cy.intercept('GET', apiUrl, {
+//             statusCode: 200,
+//             body: [
+//                 presavedDoc1,
+//                 presavedDoc2
+//             ]
+//         });
       
-        cy.visit('/')
+//         cy.visit('/')
       
-        const listButton = cy.get('#toggle-list-btn > button');
+//         const listButton = cy.get('#toggle-list-btn > button');
 
-        listButton.click();
+//         listButton.click();
 
-        cy.contains(presavedDoc1.title);
-    })
+//         cy.contains(presavedDoc1.title);
+//     })
 
-    it('clicking document in list loads it into text editor', async () => {
-        cy.intercept('GET', apiUrl, {
-            statusCode: 200,
-            body: [
-                presavedDoc1,
-                presavedDoc2
-            ]
-        });
+//     it('clicking document in list loads it into text editor', async () => {
+//         cy.intercept('GET', apiUrl, {
+//             statusCode: 200,
+//             body: [
+//                 presavedDoc1,
+//                 presavedDoc2
+//             ]
+//         });
       
-        cy.visit('/')
+//         cy.visit('/')
       
-        const listButton = cy.get('#toggle-list-btn > button');
+//         const listButton = cy.get('#toggle-list-btn > button');
         
-        listButton.click();
+//         listButton.click();
 
-        cy.wait(3);
+//         cy.wait(3);
 
-        const firstDocItem = cy.get('.document-list-item-li').first();
+//         const firstDocItem = cy.get('.document-list-item-li').first();
 
-        firstDocItem.click();
+//         firstDocItem.click();
 
-        const quillEditor = cy.get('.ql-editor').first();
-        quillEditor.contains(presavedDoc1.body);
+//         const quillEditor = cy.get('.ql-editor').first();
+//         quillEditor.contains(presavedDoc1.body);
 
-    })
-});
+//     })
+// });
 
 
-describe('new documents', () => {
-    it('clicking save button initiates a POST request to database with current title/body in title field/editor input', () => {
-        cy.intercept('POST', apiUrl, {
-            statusCode: 200,
-            body: newDoc1WithGeneratedId
-        }).as('saveRoute');
+// describe('new documents', () => {
+//     it('clicking save button initiates a POST request to database with current title/body in title field/editor input', () => {
+//         cy.intercept('POST', apiUrl, {
+//             statusCode: 200,
+//             body: newDoc1WithGeneratedId
+//         }).as('saveRoute');
 
-        cy.intercept('GET', apiUrl, {
-            statusCode: 200,
-            body: [newDoc1WithGeneratedId]
-        }).as('fetchRoute');
+//         cy.intercept('GET', apiUrl, {
+//             statusCode: 200,
+//             body: [newDoc1WithGeneratedId]
+//         }).as('fetchRoute');
       
-        cy.visit('/')
+//         cy.visit('/')
 
-        const quillEditor = cy.get('.ql-editor').first();
-        quillEditor.type(newDoc1.body);
+//         const quillEditor = cy.get('.ql-editor').first();
+//         quillEditor.type(newDoc1.body);
 
-        const titleInput = cy.get('#title-input');
-        titleInput.type(newDoc1.title);
+//         const titleInput = cy.get('#title-input');
+//         titleInput.type(newDoc1.title);
       
-        const saveButton = cy.get('#save-doc-btn > button');
+//         const saveButton = cy.get('#save-doc-btn > button');
 
-        saveButton.click();
-        cy.wait('@saveRoute').its('response.body.title').should('eq', newDoc1WithGeneratedId.title);
+//         saveButton.click();
+//         cy.wait('@saveRoute').its('response.body.title').should('eq', newDoc1WithGeneratedId.title);
 
-    })
-});
+//     })
+// });
