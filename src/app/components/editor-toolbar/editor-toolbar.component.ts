@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { Document } from 'src/app/Document';
+import { TextDocument } from 'src/app/TextDocument';
 import { UiService } from 'src/app/services/ui.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { UiService } from 'src/app/services/ui.service';
 })
 export class EditorToolbarComponent implements OnInit {
 
-  @Input() documents: Document[] = [];
+  @Input() documents: TextDocument[] = [];
   @Output() saveSignal = new EventEmitter();
   @Output() onChangeDoc = new EventEmitter();
   @Output() onNewDoc = new EventEmitter();
@@ -38,7 +38,7 @@ export class EditorToolbarComponent implements OnInit {
     this.onNewDoc.emit();
   }
 
-  changeDoc(document: Document): void {
+  changeDoc(document: TextDocument): void {
     this.onChangeDoc.emit(document);
   }
 

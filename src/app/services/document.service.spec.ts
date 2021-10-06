@@ -3,16 +3,16 @@ import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { DocumentService } from './document.service';
 
-import { Document } from '../Document';
+import { TextDocument } from '../TextDocument';
 import { asyncData } from 'src/testing/async-observable-helpers';
 
-const emptyDoc: Document = {
+const emptyDoc: TextDocument = {
   _id: '',
   title: '',
   body: ''
 };
 
-const filledDoc: Document = {
+const filledDoc: TextDocument = {
   _id: 'abcdefghijklmnopqrstuvwx',
   title: 'filled-title',
   body: 'filled-body'
@@ -43,7 +43,7 @@ describe('DocumentService', () => {
   });
 
   it('#createDocument should call httpClient post with just title and body of empty doc', (done: DoneFn) => {
-    const idDoc: Document = {
+    const idDoc: TextDocument = {
       _id: 'abcdefghijklmnopqrstuvwx',
       title: '',
       body: ''

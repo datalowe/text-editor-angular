@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import { Document } from 'src/app/Document';
+import { TextDocument } from 'src/app/TextDocument';
 
 @Component({
   selector: 'app-document-list-item',
@@ -8,7 +8,7 @@ import { Document } from 'src/app/Document';
   styleUrls: ['./document-list-item.component.css']
 })
 export class DocumentListItemComponent implements OnInit {
-  @Input() document: Document = {
+  @Input() document: TextDocument = {
     _id: '',
     title: '',
     body: ''

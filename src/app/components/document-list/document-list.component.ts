@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
-import { Document } from 'src/app/Document';
+import { TextDocument } from 'src/app/TextDocument';
 
 @Component({
   selector: 'app-document-list',
@@ -8,7 +8,7 @@ import { Document } from 'src/app/Document';
   styleUrls: ['./document-list.component.css']
 })
 export class DocumentListComponent implements OnInit {
-  @Input() documents: Document[] = [];
+  @Input() documents: TextDocument[] = [];
 
   @Output() onSelectDoc = new EventEmitter();
 
@@ -17,7 +17,7 @@ export class DocumentListComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onClickDoc(document: Document): void {
+  onClickDoc(document: TextDocument): void {
     this.onSelectDoc.emit(document);
   }
 }

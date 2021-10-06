@@ -1,11 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { first } from 'rxjs/operators';
-import { Document } from 'src/app/Document';
+import { TextDocument } from 'src/app/TextDocument';
 import { DocumentListItemComponent } from '../document-list-item/document-list-item.component';
 
 import { DocumentListComponent } from './document-list.component';
 
-const testDoc: Document = {
+const testDoc: TextDocument = {
   '_id': 'abcdefghijklmnopqrstuvwx',
   'title': 'test-title',
   'body': 'test-body'
@@ -42,7 +42,7 @@ describe('DocumentListComponent', () => {
   it('raises the onSelectDoc event when embedded document list item is clicked', () => {
     // TODO update so that it's an embedded item that is clicked, and check that the correct
     // document is passed on through event.
-    comp.onSelectDoc.pipe(first()).subscribe((selectedDoc: Document) => expect(selectedDoc).toBe(testDoc));
+    comp.onSelectDoc.pipe(first()).subscribe((selectedDoc: TextDocument) => expect(selectedDoc).toBe(testDoc));
     comp.onClickDoc(testDoc);
   })
 });

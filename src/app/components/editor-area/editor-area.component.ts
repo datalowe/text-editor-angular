@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { QuillEditorComponent } from 'ngx-quill';
 import { Subscription } from 'rxjs';
 
-import { Document } from 'src/app/Document';
+import { TextDocument } from 'src/app/TextDocument';
 import { DocumentService } from 'src/app/services/document.service';
 
 @Component({
@@ -13,9 +13,9 @@ import { DocumentService } from 'src/app/services/document.service';
 export class EditorAreaComponent implements OnInit {
 
   @ViewChild('editor') editor: QuillEditorComponent;
-  savedDocs: Document[] = [];
+  savedDocs: TextDocument[] = [];
   subscription: Subscription;
-  activeDoc: Document = {
+  activeDoc: TextDocument = {
     _id: '',
     title: '',
     body: ''
@@ -69,7 +69,7 @@ export class EditorAreaComponent implements OnInit {
       );
   }
 
-  changeDoc(document: Document): void {
+  changeDoc(document: TextDocument): void {
     this.documentService
       .getDocuments()
       .subscribe(

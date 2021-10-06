@@ -6,7 +6,7 @@ import { share } from 'rxjs/operators';
 
 import { Socket } from 'ngx-socket-io';
 
-import { Document } from 'src/app/Document';
+import { TextDocument } from 'src/app/TextDocument';
 
 const sendHttpOptions = {
   headers: new HttpHeaders({
@@ -14,7 +14,7 @@ const sendHttpOptions = {
   })
 };
 
-const emptyDoc: Document = {
+const emptyDoc: TextDocument = {
   _id: '',
   title: '',
   body: ''
@@ -24,7 +24,7 @@ const emptyDoc: Document = {
   providedIn: 'root'
 })
 export class DocumentService {
-  private activeDoc: Document = {
+  private activeDoc: TextDocument = {
     ...emptyDoc
   };
   private subject: Subject<any> = new Subject<any>();
@@ -39,18 +39,18 @@ export class DocumentService {
     );
   }
 
-  getDocuments(): Observable<Document[]> {
-    return this.httpClient.get<Document[]>(this.apiUrl);
+  getDocuments(): Observable<TextDocument[]> {
+    return this.httpClient.get<TextDocument[]>(this.apiUrl);
   }
 
-  upsertDocument(): Observable<Document> {
+  upsertDocument(): Observable<TextDocument> {
     if (this.activeDoc._id === '') {
       return this.createDocument();
     } 
     return this.updateDocument();
   }
 
-  createDocument(): Observable<Document> {
+  createDocument(): Observable<TextDocument> {
     const uploadObj = {
       'title': this.activeDoc.title,
       'body': this.activeDoc.body,
@@ -59,8 +59,8 @@ export class DocumentService {
     // share is used to prevent the POST request from being sent twice since there might
     // be multiple subscribers
     const resp = this.httpClient
-      .post<Document>(this.apiUrl, uploadObj, sendHttpOptions)
-      .pipe<Document>(share());
+      .post<TextDocument>(this.apiUrl, uploadObj, sendHttpOptions)
+      .pipe<TextDocument>(share());
 
     resp.subscribe(
       (doc: any) => {
@@ -73,14 +73,14 @@ export class DocumentService {
     return resp;
   }
 
-  updateDocument(): Observable<Document> {
+  updateDocument(): Observable<TextDocument> {
     const updateUrl = `${this.apiUrl}/${this.activeDoc._id}`;
     const uploadObj = {
       'title': this.activeDoc.title,
       'body': this.activeDoc.body,
     }
 
-    return this.httpClient.put<Document>(updateUrl, uploadObj, sendHttpOptions);
+    return this.httpClient.put<TextDocument>(updateUrl, uploadObj, sendHttpOptions);
   }
 
   resetActiveDoc(): void {
@@ -111,7 +111,7 @@ export class DocumentService {
     }
   }
 
-  swapActive(newDoc: Document): void {
+  swapActive(newDoc: TextDocument): void {
     if (this.activeDoc._id) {
       this.socket.emit('leaveRoom', this.activeDoc._id);
     }

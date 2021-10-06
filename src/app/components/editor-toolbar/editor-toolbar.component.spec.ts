@@ -2,11 +2,11 @@ import { DebugElement } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ButtonComponent } from '../button/button.component';
-import { Document } from '../../Document';
+import { TextDocument } from '../../TextDocument';
 
 import { EditorToolbarComponent } from './editor-toolbar.component';
 
-const filledDoc: Document = {
+const filledDoc: TextDocument = {
   _id: 'abcdefghijklmnopqrstuvwx',
   title: 'filled-title',
   body: 'filled-body'
