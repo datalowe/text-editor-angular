@@ -4,13 +4,13 @@
         <form class="example-form" fxLayout="column" fxLayoutGap="20px" fxFlexFill>
             <mat-form-field class="example-full-width" appearance="fill">
               <mat-label>Username</mat-label>
-              <input matInput name="username">
+              <input matInput name="username" ngModel required minlength=3>
             </mat-form-field>
           
             <div gdColumns="3fr 1fr" gdAlignColumns="center stretch">
             <mat-form-field class="example-full-width" appearance="fill">
                 <mat-label>Password</mat-label>
-                <input matInput type="{{showPassword ? 'text' : 'password'}}" name="password">
+                <input matInput type="{{showPassword ? 'text' : 'password'}}" name="password" ngModel required minlength=6>
             </mat-form-field>
             <mat-checkbox gdGridAlign="center center" (click)="toggleShowPassword()">Show</mat-checkbox>
             </div>
@@ -19,7 +19,7 @@
                 mat-stroked-button color="accent" 
                 name="register-btn"
                 routerLink="/">
-                Back to login page
+                Back to login form
             </button>
           </form>
     </mat-card>
