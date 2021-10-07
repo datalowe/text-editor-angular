@@ -1,4 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-registration-area',
@@ -9,7 +11,7 @@ export class RegistrationAreaComponent implements OnInit {
 
   @Input() showPassword: boolean = false;
 
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
   }
@@ -17,4 +19,13 @@ export class RegistrationAreaComponent implements OnInit {
   toggleShowPassword(): void {
     this.showPassword = !this.showPassword;
   }
+
+  askCreateUser(f: NgForm): void {
+    if (f.valid) {
+      this.authService.createUser(
+        f.value.username,
+        f.value.password
+      ).subscribe(() => {} );
+    }
+  };
 }
