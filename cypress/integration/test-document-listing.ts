@@ -1,6 +1,7 @@
-import { TextDocument } from 'src/app/TextDocument';
+import { TextDocument } from 'src/app/interfaces/TextDocument';
+import { backendRootUrl } from 'src/app/global-variables';
 
-const apiUrl = 'https://texted-backend-2.azurewebsites.net/editor-api/document';
+const apiUrl = `{backendRootUrl}/editor-api/document`;
 
 const presavedDoc1: TextDocument = {
     _id: 'abcdefghijklmnopqrstuvwx',

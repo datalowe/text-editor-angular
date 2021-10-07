@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { first } from 'rxjs/operators';
-import { TextDocument } from 'src/app/TextDocument';
+import { TextDocument } from 'src/app/interfaces/TextDocument';
 import { DocumentListItemComponent } from '../document-list-item/document-list-item.component';
 
 import { DocumentListComponent } from './document-list.component';

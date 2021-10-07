@@ -1,8 +1,11 @@
-const registrationUser = {
+import { PlainUser } from '../../src/app/interfaces/PlainUser';
+import { backendRootUrl } from 'src/app/global-variables';
+
+const registrationUser: PlainUser = {
   username: "Pocahontas",
   password: "disney"
 };
-const apiUrl = 'https://texted-backend-2.azurewebsites.net/user';
+const apiUrl = `${backendRootUrl}/user`;
 
 describe('Login form', () => {
     it('Initial page shows login form', () => {
@@ -37,5 +40,8 @@ describe('Registration form', () => {
 
 
       cy.wait('@requestNewUser').its('request.body.username').should('eq', registrationUser.username);
+
+      // is directed to login after registering
+      cy.contains('Login');
     });
 });

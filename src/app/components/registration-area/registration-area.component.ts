@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
+import { PlainUser } from 'src/app/interfaces/PlainUser';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -11,7 +13,9 @@ export class RegistrationAreaComponent implements OnInit {
 
   @Input() showPassword: boolean = false;
 
-  constructor(private authService: AuthService) { }
+  constructor(
+    private authService: AuthService,
+    private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -21,11 +25,17 @@ export class RegistrationAreaComponent implements OnInit {
   }
 
   askCreateUser(f: NgForm): void {
-    if (f.valid) {
-      this.authService.createUser(
-        f.value.username,
-        f.value.password
-      ).subscribe(() => {} );
+    if (!f.valid) {
+      return;
     }
+    const user: PlainUser = {
+      username: f.value.username,
+      password: f.value.password
+    };
+
+    this.authService.createUser(
+      user
+    ).subscribe(() => {} );
+    this.router.navigate(['/login']);
   };
 }

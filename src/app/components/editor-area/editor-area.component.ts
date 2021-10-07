@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { QuillEditorComponent } from 'ngx-quill';
 import { Subscription } from 'rxjs';
 
-import { TextDocument } from 'src/app/TextDocument';
+import { TextDocument } from 'src/app/interfaces/TextDocument';
 import { DocumentService } from 'src/app/services/document.service';
 
 @Component({

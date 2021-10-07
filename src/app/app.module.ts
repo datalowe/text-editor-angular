@@ -7,6 +7,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
 
+import { CookieService } from 'ngx-cookie-service';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { QuillModule } from 'ngx-quill';
 
@@ -27,14 +28,17 @@ import { MatInputModule } from '@angular/material/input';
 import { MatToolbarModule } from '@angular/material/toolbar'; 
 import { MatCheckboxModule } from '@angular/material/checkbox'; 
 
+import { backendRootUrl } from './global-variables';
+
 const config: SocketIoConfig = { 
-  url: 'https://texted-backend-2.azurewebsites.net', 
+  url: backendRootUrl, 
   options: {}
 };
 
 const appRoutes: Routes = [
-  {path: '', component: LoginAreaComponent},
+  {path: 'login', component: LoginAreaComponent},
   {path: 'register', component: RegistrationAreaComponent},
+  {path: '', redirectTo: '/login', pathMatch: 'full'},
   {path: 'editor', component: EditorAreaComponent},
 ];
 
@@ -66,7 +70,9 @@ const appRoutes: Routes = [
     SocketIoModule.forRoot(config),
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [
+    CookieService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

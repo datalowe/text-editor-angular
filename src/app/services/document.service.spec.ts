@@ -3,7 +3,7 @@ import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { DocumentService } from './document.service';
 
-import { TextDocument } from '../TextDocument';
+import { TextDocument } from '../interfaces/TextDocument';
 import { asyncData } from 'src/testing/async-observable-helpers';
 
 const emptyDoc: TextDocument = {

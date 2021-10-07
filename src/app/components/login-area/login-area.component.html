@@ -1,10 +1,18 @@
 <div fxLayoutAlign="center center" fxFlexFill>
     <mat-card fxFlex="33" fxLayoutGap="20px" fxLayout="column" class="form-wrapper">
         <mat-toolbar color="primary">Login form</mat-toolbar>
-        <form class="example-form" fxLayout="column" fxLayoutGap="20px" fxFlexFill>
+        <div *ngIf="showIncorrect" class='alert'><p>The provided username or password was incorrect. Please try again.</p></div>
+        <form 
+            #f="ngForm" 
+            class="example-form" 
+            fxLayout="column"
+            fxLayoutGap="20px"
+            fxFlexFill
+            (ngSubmit)="loginUser(f)">
             <mat-form-field class="example-full-width" appearance="fill">
               <mat-label>Username</mat-label>
-              <input matInput minlength=3 name="username" type="text" ngModel required>
+              <input 
+                matInput minlength=3 name="username" type="text" ngModel required>
             </mat-form-field>
           
             <mat-form-field class="example-full-width" appearance="fill">

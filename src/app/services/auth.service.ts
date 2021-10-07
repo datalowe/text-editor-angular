@@ -1,6 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { CookieService } from 'ngx-cookie-service';
 import { Observable, throwError } from 'rxjs';
+
+import { PlainUser } from '../interfaces/PlainUser';
+import { backendRootUrl } from '../global-variables';
 
 const sendHttpOptions = {
   headers: new HttpHeaders({
@@ -13,21 +17,35 @@ const sendHttpOptions = {
 })
 export class AuthService {
 
-  private apiUrl = 'https://texted-backend-2.azurewebsites.net/user';
+  private apiUrl = `${backendRootUrl}/user`;
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(
+    private httpClient: HttpClient,
+    private cookieService: CookieService) { };
 
   createUser(
-    username: string,
-    password: string
+    user: PlainUser
   ): Observable<object> {
     const registerUrl = `${this.apiUrl}/register`;
-    const uploadObj = {
-      'username': username,
-      'password': password,
-    };
 
     return this.httpClient
-      .post<object>(registerUrl, uploadObj, sendHttpOptions);
-  }
+      .post<object>(registerUrl, user, sendHttpOptions);
+  };
+
+  async loginUser(
+    user: PlainUser
+  ): Promise<boolean> {
+    const loginUrl = `${this.apiUrl}/login`;
+
+    const tokenObj = await this.httpClient
+      .post<any>(loginUrl, user, sendHttpOptions)
+      .toPromise();
+
+    if (tokenObj.hasOwnProperty('token')) {
+      this.cookieService.set('editor-api-token', tokenObj.token);
+      return true;
+    } else {
+      return false;
+    }
+  };
 }

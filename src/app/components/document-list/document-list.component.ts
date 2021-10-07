@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
-import { TextDocument } from 'src/app/TextDocument';
+import { TextDocument } from 'src/app/interfaces/TextDocument';
 
 @Component({
   selector: 'app-document-list',

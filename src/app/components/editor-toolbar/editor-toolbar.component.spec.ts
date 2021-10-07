@@ -2,7 +2,7 @@ import { DebugElement } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ButtonComponent } from '../button/button.component';
-import { TextDocument } from '../../TextDocument';
+import { TextDocument } from '../../interfaces/TextDocument';
 
 import { EditorToolbarComponent } from './editor-toolbar.component';
 

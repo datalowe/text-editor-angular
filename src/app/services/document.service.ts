@@ -6,7 +6,8 @@ import { share } from 'rxjs/operators';
 
 import { Socket } from 'ngx-socket-io';
 
-import { TextDocument } from 'src/app/TextDocument';
+import { TextDocument } from 'src/app/interfaces/TextDocument';
+import { backendRootUrl } from '../global-variables';
 
 const sendHttpOptions = {
   headers: new HttpHeaders({
@@ -28,7 +29,7 @@ export class DocumentService {
     ...emptyDoc
   };
   private subject: Subject<any> = new Subject<any>();
-  private apiUrl = 'https://texted-backend-2.azurewebsites.net/editor-api/document';
+  private apiUrl = `${backendRootUrl}/editor-api/document`;
 
   constructor(private httpClient: HttpClient, private socket: Socket) {
     this.socket.on('docBodyUpdate',
