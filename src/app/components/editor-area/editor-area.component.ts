@@ -36,7 +36,6 @@ export class EditorAreaComponent implements OnInit {
     .getDocuments()
     .subscribe(
       (docs) => {
-        console.log('docs', docs);
         this.savedDocs = docs;
       });
   }

@@ -1,7 +1,11 @@
 <div fxLayoutAlign="center center" fxFlexFill>
-    <mat-card fxFlex="33" fxLayoutGap="20px" fxLayout="column" class="form-wrapper">
+    <mat-card fxFlex="33" [fxFlex.sm]="90" [fxFlex.xs]="90" fxLayoutGap="20px" fxLayout="column" class="form-wrapper">
         <mat-toolbar color="primary">Login form</mat-toolbar>
-        <div *ngIf="showIncorrect" class='alert'><p>The provided username or password was incorrect. Please try again.</p></div>
+        <div 
+            *ngIf="showIncorrect" 
+            class='alert'>
+            <p>The provided username or password was incorrect. Please try again.</p>
+        </div>
         <form 
             #f="ngForm" 
             class="example-form" 

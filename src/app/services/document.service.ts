@@ -27,7 +27,7 @@ export class DocumentService {
     ...emptyDoc
   };
   private subject: Subject<any> = new Subject<any>();
-  private apiUrl = `${backendRootUrl}/editor-api/document`;
+  private apiUrl: string = `${backendRootUrl}/editor-api/document`;
 
   constructor(
     private httpClient: HttpClient,
@@ -63,7 +63,7 @@ export class DocumentService {
     const uploadObj = {
       'title': this.activeDoc.title,
       'body': this.activeDoc.body,
-      'owner': this.authService.getUsername(),
+      'owner': this.authService.getOwnUsername(),
       'editors': this.activeDoc.editors
     }
     const sendHttpOptions = {
@@ -79,8 +79,7 @@ export class DocumentService {
       .pipe<TextDocument>(share());
 
     resp.subscribe(
-      (doc: any) => {
-        console.log(doc);
+      (doc: any) => {   
         this.socket.emit('createRoom', doc._id);
         this.activeDoc._id = doc._id;
       },
@@ -95,9 +94,9 @@ export class DocumentService {
     const uploadObj = {
       'title': this.activeDoc.title,
       'body': this.activeDoc.body,
-      'owner': this.authService.getUsername(),
+      'owner': this.authService.getOwnUsername(),
       'editors': this.activeDoc.editors
-    }
+    };
     const sendHttpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -142,6 +141,20 @@ export class DocumentService {
     }
     this.activeDoc = newDoc;
     this.socket.emit('createRoom', newDoc._id);
+    this.subject.next(this.activeDoc);
+  }
+
+  toggleActiveEditor(username: string): void {
+    if (this.activeDoc.editors.includes(username)) {
+      this.activeDoc.editors = this.activeDoc.editors.filter(u => u !== username);
+    } else {
+      this.activeDoc.editors.push(username);
+    }
+    this
+      .upsertDocument()
+      .subscribe(
+        (newDoc) => (this.activeDoc = newDoc)
+      );
     this.subject.next(this.activeDoc);
   }
 

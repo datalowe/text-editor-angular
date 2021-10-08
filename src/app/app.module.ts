@@ -31,6 +31,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { backendRootUrl } from './global-variables';
 import { LoggedInGuard } from './guards/logged-in.guard';
 import { NotLoggedInGuard } from './guards/not-logged-in.guard';
+import { DocumentEditorsListComponent } from './components/document-editors-list/document-editors-list.component';
 
 const config: SocketIoConfig = { 
   url: backendRootUrl, 
@@ -54,6 +55,7 @@ const appRoutes: Routes = [
     DocumentListItemComponent,
     LoginAreaComponent,
     RegistrationAreaComponent,
+    DocumentEditorsListComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -68,7 +70,7 @@ const appRoutes: Routes = [
     MatInputModule,
     MatToolbarModule,
     QuillModule.forRoot(),
-    RouterModule.forRoot(appRoutes, { enableTracing: true }),
+    RouterModule.forRoot(appRoutes, { enableTracing: false }),
     SocketIoModule.forRoot(config),
     BrowserAnimationsModule
   ],

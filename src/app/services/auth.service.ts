@@ -1,23 +1,18 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import { Observable, throwError } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 import { PlainUser } from '../interfaces/PlainUser';
 import { backendRootUrl } from '../global-variables';
-
-const sendHttpOptions = {
-  headers: new HttpHeaders({
-    'Content-Type': 'application/json',
-  })
-};
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
-  private apiUrl = `${backendRootUrl}/user`;
+  private usernameArr: string[] = [];
+  private subject: Subject<any> = new Subject<any>();
+  private apiUrl: string = `${backendRootUrl}/user`;
 
   constructor(
     private httpClient: HttpClient,
@@ -26,6 +21,11 @@ export class AuthService {
   createUser(
     user: PlainUser
   ): Observable<object> {
+    const sendHttpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      })
+    };
     const registerUrl = `${this.apiUrl}/register`;
 
     return this.httpClient
@@ -35,6 +35,11 @@ export class AuthService {
   async loginUser(
     user: PlainUser
   ): Promise<boolean> {
+    const sendHttpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      })
+    };
     const loginUrl = `${this.apiUrl}/login`;
 
     const tokenObj = await this.httpClient
@@ -61,14 +66,14 @@ export class AuthService {
       // decode token to get expiration time.
       const decodedToken = JSON.parse(atob(token.split('.')[1]));
 
-      if (decodedToken && decodedToken.exp && decodedToken.exp < Date.now()) {
+      if (decodedToken && decodedToken.exp && decodedToken.exp > Date.now()/1000) {
         return true;
       }
     }
     return false;
   }
 
-  getUsername(): string {
+  getOwnUsername(): string {
     const token: string = this.cookieService.get('editor-api-token');
 
     if (token.length > 10 && token.includes('.')) {
@@ -80,5 +85,27 @@ export class AuthService {
       }
     }
     return '';
+  }
+
+  updateUsernameArr(): void {
+    const listUsersUrl = `${this.apiUrl}/list`;
+    const sendHttpOptions = {
+      headers: new HttpHeaders({
+        'x-access-token': this.cookieService.get('editor-api-token'),
+      })
+    };
+
+    this.httpClient
+      .get<string[]>(listUsersUrl, sendHttpOptions)
+      .subscribe((uObj: any) => {
+        if (uObj && uObj.usernames) {
+          this.usernameArr = uObj.usernames;
+          this.subject.next(this.usernameArr);
+        }      
+      });
+  }
+
+  onUsernameArrUpdate(): Observable<any> {
+    return this.subject.asObservable();
   }
 }

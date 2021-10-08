@@ -6,6 +6,7 @@
         (onChangeDoc)="changeDoc($event)"
         (onNewDoc)="newDoc()">
     </app-editor-toolbar>
+    <app-document-editors-list></app-document-editors-list>
     <input 
         [(ngModel)]="activeDoc.title" 
         id="title-input" 
