@@ -67,4 +67,18 @@ export class AuthService {
     }
     return false;
   }
+
+  getUsername(): string {
+    const token: string = this.cookieService.get('editor-api-token');
+
+    if (token.length > 10 && token.includes('.')) {
+      // decode token to get expiration time.
+      const decodedToken = JSON.parse(atob(token.split('.')[1]));
+
+      if (decodedToken && decodedToken.username) {
+        return decodedToken.username;
+      }
+    }
+    return '';
+  }
 }

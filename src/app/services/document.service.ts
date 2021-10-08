@@ -8,17 +8,15 @@ import { Socket } from 'ngx-socket-io';
 
 import { TextDocument } from 'src/app/interfaces/TextDocument';
 import { backendRootUrl } from '../global-variables';
-
-const sendHttpOptions = {
-  headers: new HttpHeaders({
-    'Content-Type': 'application/json',
-  })
-};
+import { CookieService } from 'ngx-cookie-service';
+import { AuthService } from './auth.service';
 
 const emptyDoc: TextDocument = {
   _id: '',
   title: '',
-  body: ''
+  body: '',
+  owner: '',
+  editors: []
 };
 
 @Injectable({
@@ -31,7 +29,11 @@ export class DocumentService {
   private subject: Subject<any> = new Subject<any>();
   private apiUrl = `${backendRootUrl}/editor-api/document`;
 
-  constructor(private httpClient: HttpClient, private socket: Socket) {
+  constructor(
+    private httpClient: HttpClient,
+    private socket: Socket,
+    private cookieService: CookieService,
+    private authService: AuthService) {
     this.socket.on('docBodyUpdate',
       (data: any) => {
         this.activeDoc.body = data.text;
@@ -41,13 +43,19 @@ export class DocumentService {
   }
 
   getDocuments(): Observable<TextDocument[]> {
-    return this.httpClient.get<TextDocument[]>(this.apiUrl);
+    const sendHttpOptions = {
+      headers: new HttpHeaders({
+        'x-access-token': this.cookieService.get('editor-api-token'),
+      })
+    };
+
+    return this.httpClient.get<TextDocument[]>(this.apiUrl, sendHttpOptions);
   }
 
   upsertDocument(): Observable<TextDocument> {
     if (this.activeDoc._id === '') {
       return this.createDocument();
-    } 
+    }
     return this.updateDocument();
   }
 
@@ -55,8 +63,15 @@ export class DocumentService {
     const uploadObj = {
       'title': this.activeDoc.title,
       'body': this.activeDoc.body,
+      'owner': this.authService.getUsername(),
+      'editors': this.activeDoc.editors
     }
-
+    const sendHttpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'x-access-token': this.cookieService.get('editor-api-token'),
+      })
+    };
     // share is used to prevent the POST request from being sent twice since there might
     // be multiple subscribers
     const resp = this.httpClient
@@ -65,6 +80,7 @@ export class DocumentService {
 
     resp.subscribe(
       (doc: any) => {
+        console.log(doc);
         this.socket.emit('createRoom', doc._id);
         this.activeDoc._id = doc._id;
       },
@@ -79,7 +95,15 @@ export class DocumentService {
     const uploadObj = {
       'title': this.activeDoc.title,
       'body': this.activeDoc.body,
+      'owner': this.authService.getUsername(),
+      'editors': this.activeDoc.editors
     }
+    const sendHttpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'x-access-token': this.cookieService.get('editor-api-token'),
+      })
+    };
 
     return this.httpClient.put<TextDocument>(updateUrl, uploadObj, sendHttpOptions);
   }

@@ -18,7 +18,9 @@ export class EditorAreaComponent implements OnInit {
   activeDoc: TextDocument = {
     _id: '',
     title: '',
-    body: ''
+    body: '',
+    owner: '',
+    editors: []
   };
 
   constructor(private documentService: DocumentService) {
@@ -33,8 +35,10 @@ export class EditorAreaComponent implements OnInit {
     this.documentService
     .getDocuments()
     .subscribe(
-      (docs) => (this.savedDocs = docs)
-    );
+      (docs) => {
+        console.log('docs', docs);
+        this.savedDocs = docs;
+      });
   }
 
   updateText(): void {

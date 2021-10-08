@@ -11,7 +11,9 @@ export class DocumentListItemComponent implements OnInit {
   @Input() document: TextDocument = {
     _id: '',
     title: '',
-    body: ''
+    body: '',
+    owner: '',
+    editors: []
   }
 
   constructor() { }
