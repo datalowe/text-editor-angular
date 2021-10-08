@@ -29,6 +29,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCheckboxModule } from '@angular/material/checkbox'; 
 
 import { backendRootUrl } from './global-variables';
+import { LoggedInGuard } from './guards/logged-in.guard';
+import { NotLoggedInGuard } from './guards/not-logged-in.guard';
 
 const config: SocketIoConfig = { 
   url: backendRootUrl, 
@@ -36,10 +38,10 @@ const config: SocketIoConfig = {
 };
 
 const appRoutes: Routes = [
-  {path: 'login', component: LoginAreaComponent},
-  {path: 'register', component: RegistrationAreaComponent},
+  {path: 'login', component: LoginAreaComponent, canActivate: [NotLoggedInGuard]},
+  {path: 'register', component: RegistrationAreaComponent, canActivate: [NotLoggedInGuard]},
   {path: '', redirectTo: '/login', pathMatch: 'full'},
-  {path: 'editor', component: EditorAreaComponent},
+  {path: 'editor', component: EditorAreaComponent, canActivate: [LoggedInGuard]},
 ];
 
 @NgModule({

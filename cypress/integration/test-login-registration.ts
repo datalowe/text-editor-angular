@@ -8,14 +8,14 @@ const registrationUser: PlainUser = {
 const apiUrl = `${backendRootUrl}/user`;
 
 describe('Login form', () => {
-    it('Initial page shows login form', () => {
+    it('Initial page shows login form for non-logged in user', () => {
       cy.visit('/');
       cy.contains('Login');
     });
 });
 
 describe('Registration form', () => {
-    it('Registration page shows registration form', () => {
+    it('Registration page shows registration form for non-logged in user', () => {
       cy.visit('/register');
       cy.contains('Registration');
     });
