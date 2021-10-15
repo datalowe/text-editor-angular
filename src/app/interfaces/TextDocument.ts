@@ -1,7 +1,17 @@
+import { Editor } from "./Editor";
+
 export interface TextDocument {
-    _id: string, 
+    id: string, 
     title: string,
     body: string,
-    owner: string,
-    editors: string[]
+    owner: Editor,
+    editors: Editor[]
 }
+
+export const emptyDoc: TextDocument = {
+    id: '',
+    title: '',
+    body: '',
+    owner: {username: '', id: ''},
+    editors: []
+};

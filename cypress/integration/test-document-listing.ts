@@ -4,25 +4,25 @@ import { backendRootUrl } from 'src/app/global-variables';
 const apiUrl = `{backendRootUrl}/editor-api/document`;
 
 const presavedDoc1: TextDocument = {
-    _id: 'abcdefghijklmnopqrstuvwx',
+    id: 'abcdefghijklmnopqrstuvwx',
     title: 'saved-title-1',
     body: 'saved-body-2'
 };
 
 const presavedDoc2: TextDocument = {
-    _id: '1bcdefghijklmnopqrstuvwx',
+    id: '1bcdefghijklmnopqrstuvwx',
     title: 'saved-title-2',
     body: 'saved-body-2'
 };
 
 const newDoc1: TextDocument = {
-    _id: '',
+    id: '',
     title: 'new-title-1',
     body: 'new-body-1'
 };
 
 const newDoc1WithGeneratedId: TextDocument = {
-    _id: 'nnndefghijklmnopqrstuvwx',
+    id: 'nnndefghijklmnopqrstuvwx',
     title: 'new-title-1',
     body: 'new-body-1'
 };

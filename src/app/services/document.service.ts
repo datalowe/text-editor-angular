@@ -1,23 +1,48 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { share } from 'rxjs/operators';
 
 import { Socket } from 'ngx-socket-io';
+
+import { Apollo, gql, QueryRef } from 'apollo-angular';
 
 import { TextDocument } from 'src/app/interfaces/TextDocument';
 import { backendRootUrl } from '../global-variables';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthService } from './auth.service';
+import { Editor } from '../interfaces/Editor';
 
-const emptyDoc: TextDocument = {
-  _id: '',
-  title: '',
-  body: '',
-  owner: '',
-  editors: []
-};
+import { emptyDoc } from 'src/app/interfaces/TextDocument';
+import { stripTypename } from '../graphql/stripTypename';
+
+const GQL_GET_EDITORS = gql`
+  query GetEditors {
+    editors {
+      id
+      username
+    }
+  }
+`;
+
+const GQL_GET_ALL_DOCUMENTS = gql`
+  query GetDocuments {
+    documents {
+      id
+      title
+      body
+      owner {
+          id
+          username
+      }
+      editors {
+          id
+          username
+      }
+    }
+  }
+`;
 
 @Injectable({
   providedIn: 'root'
@@ -26,34 +51,52 @@ export class DocumentService {
   private activeDoc: TextDocument = {
     ...emptyDoc
   };
-  private subject: Subject<any> = new Subject<any>();
+  private allEditors: Editor[] = [];
+  private allDocs: TextDocument[] = [];
+  private activeDocSubject: Subject<any> = new Subject<any>();
+  private editorsSubject: Subject<any> = new Subject<any>();
+  private allDocsSubject: Subject<any> = new Subject<any>();
+  private allDocsWatchQuery: QueryRef<any>;
   private apiUrl: string = `${backendRootUrl}/editor-api/document`;
 
   constructor(
     private httpClient: HttpClient,
     private socket: Socket,
     private cookieService: CookieService,
-    private authService: AuthService) {
+    private authService: AuthService,
+    private apollo: Apollo) {
     this.socket.on('docBodyUpdate',
       (data: any) => {
         this.activeDoc.body = data.text;
-        this.subject.next(this.activeDoc);
+        this.activeDocSubject.next(this.activeDoc);
       }
     );
   }
 
-  getDocuments(): Observable<TextDocument[]> {
-    const sendHttpOptions = {
-      headers: new HttpHeaders({
-        'x-access-token': this.cookieService.get('editor-api-token'),
-      })
-    };
+  startDocumentsSubscription(): void {
+    this.allDocsWatchQuery = this.apollo
+      .watchQuery<any>({
+        query: GQL_GET_ALL_DOCUMENTS
+      });
+    this.allDocsWatchQuery
+      .valueChanges
+      .subscribe(
+        (result: any) => {
+          if (result?.data?.documents) {
+            this.allDocs = result.data.documents.map((d: any) => stripTypename(d));
+            
+            this.allDocsSubject.next(this.allDocs);
+          }
+        }
+      );
+  }
 
-    return this.httpClient.get<TextDocument[]>(this.apiUrl, sendHttpOptions);
+  refreshAllDocs(): void {
+    this.allDocsWatchQuery.refetch()
   }
 
   upsertDocument(): Observable<TextDocument> {
-    if (this.activeDoc._id === '') {
+    if (this.activeDoc.id === '') {
       return this.createDocument();
     }
     return this.updateDocument();
@@ -63,8 +106,8 @@ export class DocumentService {
     const uploadObj = {
       'title': this.activeDoc.title,
       'body': this.activeDoc.body,
-      'owner': this.authService.getOwnUsername(),
-      'editors': this.activeDoc.editors
+      'ownerId': this.authService.getOwnUserId(),
+      'editorIds': this.activeDoc.editors.map(editor => editor.id)
     }
     const sendHttpOptions = {
       headers: new HttpHeaders({
@@ -80,8 +123,8 @@ export class DocumentService {
 
     resp.subscribe(
       (doc: any) => {   
-        this.socket.emit('createRoom', doc._id);
-        this.activeDoc._id = doc._id;
+        this.socket.emit('createRoom', doc.id);
+        this.activeDoc.id = doc.id;
       },
       (err: any) => console.error('failed when trying to create doc:', err)
     );
@@ -90,12 +133,12 @@ export class DocumentService {
   }
 
   updateDocument(): Observable<TextDocument> {
-    const updateUrl = `${this.apiUrl}/${this.activeDoc._id}`;
+    const updateUrl = `${this.apiUrl}/${this.activeDoc.id}`;
     const uploadObj = {
       'title': this.activeDoc.title,
       'body': this.activeDoc.body,
       'owner': this.authService.getOwnUsername(),
-      'editors': this.activeDoc.editors
+      'editors': this.activeDoc.editors.map(editor => editor.id)
     };
     const sendHttpOptions = {
       headers: new HttpHeaders({
@@ -107,28 +150,44 @@ export class DocumentService {
     return this.httpClient.put<TextDocument>(updateUrl, uploadObj, sendHttpOptions);
   }
 
+  startEditorsSubscription(): void {
+    this.apollo
+      .watchQuery({
+        query: GQL_GET_EDITORS
+      })
+      .valueChanges
+      .subscribe(
+        (result: any) => {
+          if (result?.data?.editors) {
+            this.allEditors = result.data.editors.map((e: any) => stripTypename(e));
+            this.editorsSubject.next(this.allEditors);
+          }
+        }
+      )
+  };
+
   resetActiveDoc(): void {
-    if (this.activeDoc._id) {
-      this.socket.emit('leaveRoom', this.activeDoc._id);
+    if (this.activeDoc.id) {
+      this.socket.emit('leaveRoom', this.activeDoc.id);
     }
     this.activeDoc = {
       ...emptyDoc
     }
-    this.subject.next(this.activeDoc);
+    this.activeDocSubject.next(this.activeDoc);
   }
 
   updateActiveTitle(newTitle: string): void {
     this.activeDoc.title = newTitle;
-    this.subject.next(this.activeDoc);
+    this.activeDocSubject.next(this.activeDoc);
   }
 
   updateActiveBody(newBody: string): void {
     this.activeDoc.body = newBody;
-    this.subject.next(this.activeDoc);
-    if (this.activeDoc._id) {
+    this.activeDocSubject.next(this.activeDoc);
+    if (this.activeDoc.id) {
       this.socket.emit('docBodyUpdate', {
         'text': newBody,
-        '_id': this.activeDoc._id
+        'id': this.activeDoc.id
         }
       );
       this.updateDocument().subscribe(d => {return;});
@@ -136,29 +195,41 @@ export class DocumentService {
   }
 
   swapActive(newDoc: TextDocument): void {
-    if (this.activeDoc._id) {
-      this.socket.emit('leaveRoom', this.activeDoc._id);
+    if (this.activeDoc.id) {
+      this.socket.emit('leaveRoom', this.activeDoc.id);
     }
     this.activeDoc = newDoc;
-    this.socket.emit('createRoom', newDoc._id);
-    this.subject.next(this.activeDoc);
+    this.socket.emit('createRoom', newDoc.id);
+    this.activeDocSubject.next(this.activeDoc);
   }
 
-  toggleActiveEditor(username: string): void {
-    if (this.activeDoc.editors.includes(username)) {
-      this.activeDoc.editors = this.activeDoc.editors.filter(u => u !== username);
+  toggleActiveEditor(editorId: string): void {
+    if (this.activeDoc.editors.find(e => e.id === editorId)) {
+      this.activeDoc.editors = this.activeDoc.editors.filter(e => e.id !== editorId);
     } else {
-      this.activeDoc.editors.push(username);
+      const matchEditor = this.allEditors.find(e => e.id === editorId);
+
+      if (matchEditor) {
+        this.activeDoc.editors.push(matchEditor);
+      }
     }
     this
       .upsertDocument()
       .subscribe(
         (newDoc) => (this.activeDoc = newDoc)
       );
-    this.subject.next(this.activeDoc);
+    this.activeDocSubject.next(this.activeDoc);
   }
 
   onActiveDocUpdate(): Observable<any> {
-    return this.subject.asObservable();
+    return this.activeDocSubject.asObservable();
+  }
+
+  onAllDocsUpdate(): Observable<any> {
+    return this.allDocsSubject.asObservable();
+  }
+
+  onEditorsUpdate(): Observable<any> {
+    return this.editorsSubject.asObservable();
   }
 }

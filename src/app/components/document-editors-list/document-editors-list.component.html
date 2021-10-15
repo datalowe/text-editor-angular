@@ -1,14 +1,14 @@
-<mat-card *ngIf="activeDoc.editors.length > 0 || isDocumentOwner()" fxFlex="100" fxLayoutGap="20px" fxLayout="column" class="editor-list-wrapper">
+<mat-card *ngIf="activeDoc.editors.length > 0 || userIsDocumentOwner()" fxFlex="100" fxLayoutGap="20px" fxLayout="column" class="editor-list-wrapper">
     <mat-toolbar color="primary" class="editor-list-title" margin=0>Editors</mat-toolbar>
-    <ul *ngIf="!isDocumentOwner()" class="list-editors-nonowner">
-        <li *ngFor="let ename of activeDoc.editors;">{{ ename }}</li>
+    <ul *ngIf="!userIsDocumentOwner()" class="list-editors-nonowner">
+        <li *ngFor="let editor of activeDoc.editors;">{{ editor.username }}</li>
     </ul>
-    <form  *ngIf="isDocumentOwner()" class="list-editors-owner">
+    <form  *ngIf="userIsDocumentOwner()" class="list-editors-owner">
         <mat-checkbox 
-            *ngFor="let uname of allUsernames;"
-            (click)="toggleEditor(uname)"
-            [checked]="isDocumentEditor(uname)">
-            {{ uname }}
+            *ngFor="let editor of allEditors;"
+            (click)="toggleEditor(editor.id)"
+            [checked]="isDocumentEditor(editor.id)">
+            {{ editor.username }}
         </mat-checkbox>
     </form>
 </mat-card>

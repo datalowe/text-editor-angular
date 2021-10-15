@@ -7,13 +7,13 @@ import { TextDocument } from '../interfaces/TextDocument';
 import { asyncData } from 'src/testing/async-observable-helpers';
 
 const emptyDoc: TextDocument = {
-  _id: '',
+  id: '',
   title: '',
   body: ''
 };
 
 const filledDoc: TextDocument = {
-  _id: 'abcdefghijklmnopqrstuvwx',
+  id: 'abcdefghijklmnopqrstuvwx',
   title: 'filled-title',
   body: 'filled-body'
 };
@@ -44,7 +44,7 @@ describe('DocumentService', () => {
 
   it('#createDocument should call httpClient post with just title and body of empty doc', (done: DoneFn) => {
     const idDoc: TextDocument = {
-      _id: 'abcdefghijklmnopqrstuvwx',
+      id: 'abcdefghijklmnopqrstuvwx',
       title: '',
       body: ''
     }

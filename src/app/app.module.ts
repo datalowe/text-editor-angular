@@ -32,6 +32,7 @@ import { backendRootUrl } from './global-variables';
 import { LoggedInGuard } from './guards/logged-in.guard';
 import { NotLoggedInGuard } from './guards/not-logged-in.guard';
 import { DocumentEditorsListComponent } from './components/document-editors-list/document-editors-list.component';
+import { GraphQLModule } from './graphql.module';
 
 const config: SocketIoConfig = { 
   url: backendRootUrl, 
@@ -72,7 +73,8 @@ const appRoutes: Routes = [
     QuillModule.forRoot(),
     RouterModule.forRoot(appRoutes, { enableTracing: false }),
     SocketIoModule.forRoot(config),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    GraphQLModule
   ],
   providers: [
     CookieService

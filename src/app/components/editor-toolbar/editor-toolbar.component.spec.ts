@@ -7,7 +7,7 @@ import { TextDocument } from '../../interfaces/TextDocument';
 import { EditorToolbarComponent } from './editor-toolbar.component';
 
 const filledDoc: TextDocument = {
-  _id: 'abcdefghijklmnopqrstuvwx',
+  id: 'abcdefghijklmnopqrstuvwx',
   title: 'filled-title',
   body: 'filled-body'
 };

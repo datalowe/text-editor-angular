@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { TextDocument } from 'src/app/interfaces/TextDocument';
+import { emptyDoc } from 'src/app/interfaces/TextDocument';
 
 @Component({
   selector: 'app-document-list-item',
@@ -9,11 +10,7 @@ import { TextDocument } from 'src/app/interfaces/TextDocument';
 })
 export class DocumentListItemComponent implements OnInit {
   @Input() document: TextDocument = {
-    _id: '',
-    title: '',
-    body: '',
-    owner: '',
-    editors: []
+    ...emptyDoc
   }
 
   constructor() { }

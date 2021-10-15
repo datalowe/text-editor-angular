@@ -6,7 +6,7 @@ import { DocumentListItemComponent } from '../document-list-item/document-list-i
 import { DocumentListComponent } from './document-list.component';
 
 const testDoc: TextDocument = {
-  '_id': 'abcdefghijklmnopqrstuvwx',
+  'id': 'abcdefghijklmnopqrstuvwx',
   'title': 'test-title',
   'body': 'test-body'
 }

@@ -5,6 +5,8 @@ import { Subscription } from 'rxjs';
 import { TextDocument } from 'src/app/interfaces/TextDocument';
 import { DocumentService } from 'src/app/services/document.service';
 
+import { emptyDoc } from 'src/app/interfaces/TextDocument';
+
 @Component({
   selector: 'app-editor-area',
   templateUrl: './editor-area.component.html',
@@ -13,31 +15,33 @@ import { DocumentService } from 'src/app/services/document.service';
 export class EditorAreaComponent implements OnInit {
 
   @ViewChild('editor') editor: QuillEditorComponent;
+  savedDocsSubscription: Subscription;
   savedDocs: TextDocument[] = [];
-  subscription: Subscription;
+  activeDocSubscription: Subscription;
   activeDoc: TextDocument = {
-    _id: '',
-    title: '',
-    body: '',
-    owner: '',
-    editors: []
+    ...emptyDoc
   };
 
   constructor(private documentService: DocumentService) {
-    this.subscription = this.documentService
+    this.activeDocSubscription = this.documentService
       .onActiveDocUpdate()
       .subscribe(
         (d) => (this.activeDoc = d)
       );
+    this.savedDocsSubscription = this.documentService
+      .onAllDocsUpdate()
+      .subscribe(
+        (docs) => {
+          this.savedDocs = docs;
+        }
+      )
    }
 
   ngOnInit(): void {
     this.documentService
-    .getDocuments()
-    .subscribe(
-      (docs) => {
-        this.savedDocs = docs;
-      });
+      .startDocumentsSubscription();
+    this.documentService
+      .startEditorsSubscription();
   }
 
   updateText(): void {
@@ -61,7 +65,7 @@ export class EditorAreaComponent implements OnInit {
         (d) => {
           // check if document already was in saved docs. if so, update it.
           // otherwise add it to array of saved docs.
-          const matchDoc = this.savedDocs.find(sD => sD._id === d._id);
+          const matchDoc = this.savedDocs.find(sD => sD.id === d.id);
           if (matchDoc) {
             matchDoc.title = d.title;
             matchDoc.body = d.body;
@@ -73,20 +77,12 @@ export class EditorAreaComponent implements OnInit {
   }
 
   changeDoc(document: TextDocument): void {
-    this.documentService
-      .getDocuments()
-      .subscribe(
-        (docs) => (this.savedDocs = docs)
-    );
+    this.documentService.refreshAllDocs();
     this.documentService.swapActive(document);
   }
 
   newDoc(): void {
-    this.documentService
-    .getDocuments()
-    .subscribe(
-      (docs) => (this.savedDocs = docs)
-    );
+    this.documentService.refreshAllDocs();
     this.documentService.resetActiveDoc();
     this.editor['quillEditor']['root']['innerText'] = '';
   }
