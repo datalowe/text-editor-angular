@@ -37,7 +37,10 @@ export const GQL_CREATE_NEW_DOCUMENT = gql`
             title: $title
             body: $body
             ownerId: $ownerId
-        )
+        ) {
+          title
+          body
+        }
     }
 `;
 
@@ -55,6 +58,19 @@ export const GQL_UPDATE_DOCUMENT = gql`
             body: $body
             ownerId: $ownerId
             editorIds: $editorIds
-        )
+        ) {
+          title
+        }
     }
 `;
+
+// `mutation UpdateDocument($id: String!, $title: String!, $body: String!, $ownerId: String!, $editorIds: [String]!) {
+//  updateDocument(
+//  id: $id
+//  title: $title
+//  body: $body
+//  ownerId: $ownerId
+//  editorIds: $editorIds
+//  )
+// }
+// `
