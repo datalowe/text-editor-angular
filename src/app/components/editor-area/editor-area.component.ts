@@ -60,20 +60,7 @@ export class EditorAreaComponent implements OnInit {
       return;
     }
     this.documentService
-      .upsertDocument()
-      .subscribe(
-        (d) => {
-          // check if document already was in saved docs. if so, update it.
-          // otherwise add it to array of saved docs.
-          const matchDoc = this.savedDocs.find(sD => sD.id === d.id);
-          if (matchDoc) {
-            matchDoc.title = d.title;
-            matchDoc.body = d.body;
-          } else {
-            this.savedDocs.push(d);
-          }
-        }
-      );
+      .upsertDocument();
   }
 
   changeDoc(document: TextDocument): void {

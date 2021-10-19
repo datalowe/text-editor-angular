@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
-import { Observable, Subject, Subscription } from 'rxjs';
-import { share } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
 
 import { Socket } from 'ngx-socket-io';
 
-import { Apollo, gql, QueryRef } from 'apollo-angular';
+import { Apollo, QueryRef } from 'apollo-angular';
 
 import { TextDocument } from 'src/app/interfaces/TextDocument';
 import { backendRootUrl } from '../global-variables';
@@ -16,33 +15,7 @@ import { Editor } from '../interfaces/Editor';
 
 import { emptyDoc } from 'src/app/interfaces/TextDocument';
 import { stripTypename } from '../graphql/stripTypename';
-
-const GQL_GET_EDITORS = gql`
-  query GetEditors {
-    editors {
-      id
-      username
-    }
-  }
-`;
-
-const GQL_GET_ALL_DOCUMENTS = gql`
-  query GetDocuments {
-    documents {
-      id
-      title
-      body
-      owner {
-          id
-          username
-      }
-      editors {
-          id
-          username
-      }
-    }
-  }
-`;
+import { GQL_CREATE_NEW_DOCUMENT, GQL_GET_ALL_DOCUMENTS, GQL_GET_EDITORS, GQL_UPDATE_DOCUMENT } from '../graphql/graphql-queries';
 
 @Injectable({
   providedIn: 'root'
@@ -95,59 +68,53 @@ export class DocumentService {
     this.allDocsWatchQuery.refetch()
   }
 
-  upsertDocument(): Observable<TextDocument> {
+  upsertDocument(): void {
     if (this.activeDoc.id === '') {
       return this.createDocument();
     }
     return this.updateDocument();
   }
 
-  createDocument(): Observable<TextDocument> {
-    const uploadObj = {
+  createDocument(): void {
+    const gqlVars = {
+      'title': this.activeDoc.title,
+      'body': this.activeDoc.body,
+      'ownerId': this.authService.getOwnUserId(),
+    };
+
+    this.apollo.mutate({
+      mutation: GQL_CREATE_NEW_DOCUMENT,
+      variables: gqlVars
+    }).subscribe(
+      () => {
+        this.refreshAllDocs();
+      },
+      (error) => {
+        console.error('New document could not be created with variables:', gqlVars);
+      }
+    );    
+  }
+
+  updateDocument(): void {
+    const gqlVars = {
+      'id': this.activeDoc.id,
       'title': this.activeDoc.title,
       'body': this.activeDoc.body,
       'ownerId': this.authService.getOwnUserId(),
       'editorIds': this.activeDoc.editors.map(editor => editor.id)
-    }
-    const sendHttpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'x-access-token': this.cookieService.get('editor-api-token'),
-      })
     };
-    // share is used to prevent the POST request from being sent twice since there might
-    // be multiple subscribers
-    const resp = this.httpClient
-      .post<TextDocument>(this.apiUrl, uploadObj, sendHttpOptions)
-      .pipe<TextDocument>(share());
 
-    resp.subscribe(
-      (doc: any) => {   
-        this.socket.emit('createRoom', doc.id);
-        this.activeDoc.id = doc.id;
+    this.apollo.mutate({
+      mutation: GQL_UPDATE_DOCUMENT,
+      variables: gqlVars
+    }).subscribe(
+      () => {
+        this.refreshAllDocs();
       },
-      (err: any) => console.error('failed when trying to create doc:', err)
+      (error) => {
+        console.error('Document could not be updated with variables:', gqlVars);
+      }
     );
-
-    return resp;
-  }
-
-  updateDocument(): Observable<TextDocument> {
-    const updateUrl = `${this.apiUrl}/${this.activeDoc.id}`;
-    const uploadObj = {
-      'title': this.activeDoc.title,
-      'body': this.activeDoc.body,
-      'owner': this.authService.getOwnUsername(),
-      'editors': this.activeDoc.editors.map(editor => editor.id)
-    };
-    const sendHttpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'x-access-token': this.cookieService.get('editor-api-token'),
-      })
-    };
-
-    return this.httpClient.put<TextDocument>(updateUrl, uploadObj, sendHttpOptions);
   }
 
   startEditorsSubscription(): void {
@@ -190,7 +157,7 @@ export class DocumentService {
         'id': this.activeDoc.id
         }
       );
-      this.updateDocument().subscribe(d => {return;});
+      this.updateDocument();
     }
   }
 
@@ -214,11 +181,7 @@ export class DocumentService {
       }
     }
     this
-      .upsertDocument()
-      .subscribe(
-        (newDoc) => (this.activeDoc = newDoc)
-      );
-    this.activeDocSubject.next(this.activeDoc);
+      .upsertDocument();
   }
 
   onActiveDocUpdate(): Observable<any> {
