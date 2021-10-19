@@ -13,7 +13,6 @@ import { emptyDoc } from 'src/app/interfaces/TextDocument';
   styleUrls: ['./document-editors-list.component.scss']
 })
 export class DocumentEditorsListComponent implements OnInit {
-  allUsernames: string[] = [];
   allEditors: Editor[] = [];
   editorsSubscription: Subscription;
   usernamesSubscription: Subscription;
@@ -32,12 +31,6 @@ export class DocumentEditorsListComponent implements OnInit {
       (editors) => {
         this.allEditors = editors}
     );
-    this.usernamesSubscription = this.authService
-      .onUsernameArrUpdate()
-      .subscribe(
-        (usernames) => {
-          this.allUsernames = usernames}
-      );
     this.activeDocSubscription = this.documentService
       .onActiveDocUpdate()
       .subscribe(
@@ -48,8 +41,6 @@ export class DocumentEditorsListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authService
-      .updateUsernameArr();
   }
 
   userIsDocumentOwner(): boolean {

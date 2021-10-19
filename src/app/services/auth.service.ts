@@ -10,7 +10,6 @@ import { backendRootUrl } from '../global-variables';
   providedIn: 'root'
 })
 export class AuthService {
-  private usernameArr: string[] = [];
   private subject: Subject<any> = new Subject<any>();
   private apiUrl: string = `${backendRootUrl}/user`;
 
@@ -97,27 +96,5 @@ export class AuthService {
       }
     }
     return '';
-  }
-
-  updateUsernameArr(): void {
-    const listUsersUrl = `${this.apiUrl}/list`;
-    const sendHttpOptions = {
-      headers: new HttpHeaders({
-        'x-access-token': this.cookieService.get('editor-api-token'),
-      })
-    };
-
-    this.httpClient
-      .get<string[]>(listUsersUrl, sendHttpOptions)
-      .subscribe((uObj: any) => {
-        if (uObj && uObj.usernames) {
-          this.usernameArr = uObj.usernames;
-          this.subject.next(this.usernameArr);
-        }      
-      });
-  }
-
-  onUsernameArrUpdate(): Observable<any> {
-    return this.subject.asObservable();
   }
 }
