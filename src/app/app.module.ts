@@ -12,10 +12,8 @@ import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { QuillModule } from 'ngx-quill';
 
 import { EditorAreaComponent } from './components/editor-area/editor-area.component';
-import { ButtonComponent } from './components/button/button.component';
 import { EditorToolbarComponent } from './components/editor-toolbar/editor-toolbar.component';
 import { DocumentListComponent } from './components/document-list/document-list.component';
-import { DocumentListItemComponent } from './components/document-list-item/document-list-item.component';
 import { LoginAreaComponent } from './components/login-area/login-area.component';
 import { RegistrationAreaComponent } from './components/registration-area/registration-area.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -27,6 +25,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input'; 
 import { MatToolbarModule } from '@angular/material/toolbar'; 
 import { MatCheckboxModule } from '@angular/material/checkbox'; 
+import { MatIconModule } from '@angular/material/icon'; 
+import { MatListModule } from '@angular/material/list';
 
 import { backendRootUrl } from './global-variables';
 import { LoggedInGuard } from './guards/logged-in.guard';
@@ -50,10 +50,8 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     EditorAreaComponent,
-    ButtonComponent,
     EditorToolbarComponent,
     DocumentListComponent,
-    DocumentListItemComponent,
     LoginAreaComponent,
     RegistrationAreaComponent,
     DocumentEditorsListComponent,
@@ -68,7 +66,9 @@ const appRoutes: Routes = [
     MatCardModule,
     MatCheckboxModule,
     MatFormFieldModule,
+    MatIconModule,
     MatInputModule,
+    MatListModule,
     MatToolbarModule,
     QuillModule.forRoot(),
     RouterModule.forRoot(appRoutes, { enableTracing: false }),

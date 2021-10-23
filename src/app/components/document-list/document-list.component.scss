@@ -1,10 +1,9 @@
-.document-list-ul {
-    text-decoration: none;
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    grid-template-columns: 1fr;
-    margin: 0;
-    padding: 0;
+.document-list-card {
+    border-top: solid #7c4dff 1px;
+    max-height: 30vw;
+    overflow-y: scroll;
+}
+
+.document-list-item:nth-child(2n) {
+    background-color: #fafafa;
 }

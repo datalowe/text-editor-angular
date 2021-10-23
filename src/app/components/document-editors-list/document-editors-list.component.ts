@@ -20,6 +20,7 @@ export class DocumentEditorsListComponent implements OnInit {
   activeDoc: TextDocument = {
     ...emptyDoc
   };
+  showEditors: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -55,5 +56,9 @@ export class DocumentEditorsListComponent implements OnInit {
 
   toggleEditor(editorId: string): void {
     this.documentService.toggleActiveEditor(editorId);
+  }
+
+  toggleShowEditors(): void {
+    this.showEditors = !this.showEditors;
   }
 }

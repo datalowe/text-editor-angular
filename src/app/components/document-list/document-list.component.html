@@ -1,8 +1,9 @@
-<ul class="document-list-ul">
-    <app-document-list-item 
-        *ngFor="let doc of documents" 
-        [document]=doc
-        (click)="onClickDoc(doc)">
-    </app-document-list-item>
-</ul>
-
+<mat-card class="document-list-card">
+    <mat-action-list>
+        <button mat-list-item
+            *ngFor="let doc of documents"
+            (click)="onClickDoc(doc)"
+            class="document-list-item"
+        >{{doc.title}}</button>
+    </mat-action-list>
+</mat-card>

@@ -1,27 +1,35 @@
-<app-button 
-    id='save-doc-btn'
-    class="btn-center" 
-    color="#EB6797" 
-    text="Save" 
-    (btnClick)="onSave()">
-</app-button>
-<app-button 
-    id='new-doc-btn'
-    class="btn-center" 
-    color="#EB6797" 
-    text="New" 
-    (btnClick)="newDoc()">
-</app-button>
-<app-button 
-    id='toggle-list-btn'
-    class="btn-center" 
-    color="#EB6797" 
-    text="{{showDocList ? 'Close' : 'List'}}" 
-    (btnClick)="toggleShowList()">
-</app-button>
-<app-document-list 
-    *ngIf="showDocList" 
-    class="document-list" 
-    [documents]="documents" 
-    (onSelectDoc)="changeDoc($event)">
-</app-document-list>
+<div fxLayout="column" fxLayoutAlign="center" fxFlex="100vw" class="toolbar-wrapper">
+    <mat-card
+        fxLayout="row nowrap"
+        fxLayoutAlign="space-around center"
+        fxFlex="100"
+    >
+        <button mat-icon-button 
+            id='save-doc-btn'
+            aria-label="A floppy disk icon, indicating that this button is used to save the current document."
+            color="accent"
+            (click)="onSave()">
+            <mat-icon>save</mat-icon>
+        </button>
+        <button mat-icon-button 
+            id='new-doc-btn'
+            aria-label="An icon reading 'new', indicating that this is a button for creating a new document."
+            color="accent"
+            (click)="newDoc()">
+            <mat-icon>fiber_new</mat-icon>
+        </button>
+        <button mat-icon-button 
+            id='toggle-list-btn'
+            aria-label="An icon reading 'new', indicating that this is a button for creating a new document."
+            color="accent"
+            (click)="toggleShowList()">
+            <mat-icon>{{showDocList ? "expand_less" : "list" }}</mat-icon>
+        </button>
+    </mat-card>
+    <app-document-list 
+        *ngIf="showDocList" 
+        class="document-list" 
+        [documents]="documents" 
+        (onSelectDoc)="changeDoc($event)">
+    </app-document-list>
+</div>

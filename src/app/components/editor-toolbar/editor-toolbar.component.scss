@@ -1,9 +1,7 @@
-.btn-center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.toolbar-wrapper {
+    margin-bottom: 1rem;
 }
 
-.document-list {
-    grid-column: 1 / 4;
+.mat-icon-button {
+    transform: scale(1.4);
 }

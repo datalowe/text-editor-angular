@@ -1,18 +1,25 @@
 <div class="editor-area-wrapper">
     <app-editor-toolbar 
-        class="editor-toolbar"
         [documents]="savedDocs"
         (saveSignal)="saveText()"
         (onChangeDoc)="changeDoc($event)"
         (onNewDoc)="newDoc()">
     </app-editor-toolbar>
     <app-document-editors-list></app-document-editors-list>
-    <input 
-        [(ngModel)]="activeDoc.title" 
-        id="title-input" 
-        class="document-title-field" 
-        placeholder="Document Title" 
-        (keyup)="updateTitle($event)">
+    <mat-form-field appearance="fill">
+        <mat-label>Document Title</mat-label>
+        <input 
+            matInput
+            minlength=1
+            [(ngModel)]="activeDoc.title"
+            id="title-input"
+            class="document-title-field"
+            (keyup)="updateTitle($event)"
+            name="title"
+            type="text"
+            color="accent"
+            required>
+        </mat-form-field>
     <quill-editor 
         #editor 
         [(ngModel)]="activeDoc.body"
