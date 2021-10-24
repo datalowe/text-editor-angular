@@ -6,6 +6,7 @@ import { TextDocument } from 'src/app/interfaces/TextDocument';
 import { DocumentService } from 'src/app/services/document.service';
 
 import { emptyDoc } from 'src/app/interfaces/TextDocument';
+import { requestDocPDF } from 'src/app/util-functions/requestDocPDF';
 
 @Component({
   selector: 'app-editor-area',
@@ -72,6 +73,14 @@ export class EditorAreaComponent implements OnInit {
     this.documentService.refreshAllDocs();
     this.documentService.resetActiveDoc();
     this.editor['quillEditor']['root']['innerText'] = '';
+  }
+
+  triggerRequestDocPDF(): void {
+    requestDocPDF(this.activeDoc.id, this.activeDoc.title);
+  }
+
+  activeDocIsSaved(): boolean {
+    return this.savedDocs.includes(this.activeDoc);
   }
 
 }

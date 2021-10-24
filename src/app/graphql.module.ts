@@ -5,6 +5,7 @@ import {HttpLink} from 'apollo-angular/http';
 import { backendRootUrl } from './global-variables';
 
 import { setContext } from '@apollo/client/link/context';
+import { getAPIToken } from './util-functions/getAPIToken';
 
 const uri = `${backendRootUrl}/editor-api/graphql`; // graphQL backend endpoint
 
@@ -16,16 +17,8 @@ export function createApollo(httpLink: HttpLink): ApolloClientOptions<any> {
   // based on https://apollo-angular.com/docs/recipes/authentication/
   const auth = setContext((operation, context) => {
     // can't rely on ngx-cookie-service here since things aren't happening inside of
-    // of a class. instead, using guidance for extracting cookie values from
-    // https://developer.mozilla.org/docs/Web/API/Document/cookie
-    let token: string | null = null;
-
-    const tokenRow: string | undefined = document.cookie
-    .split('; ')
-    .find(row => row.startsWith('editor-api-token'))
-    if (tokenRow) {
-      token = tokenRow.split('=')[1];
-    }
+    // of a class. 
+    const token: string | null = getAPIToken();
 
     if (token === null) {
       return {};

@@ -6,20 +6,30 @@
         (onNewDoc)="newDoc()">
     </app-editor-toolbar>
     <app-document-editors-list></app-document-editors-list>
-    <mat-form-field appearance="outline">
-        <mat-label>Document Title</mat-label>
-        <input 
-            matInput
-            minlength=1
-            [(ngModel)]="activeDoc.title"
-            id="title-input"
-            class="document-title-field"
-            (keyup)="updateTitle($event)"
-            name="title"
-            type="text"
-            color="accent"
-            required>
+    <mat-card class="doc-title-pdf-wrapper" color="primary">
+        <mat-form-field appearance="outline">
+            <mat-label>Document Title</mat-label>
+            <input 
+                matInput
+                minlength=1
+                [(ngModel)]="activeDoc.title"
+                id="title-input"
+                class="document-title-field"
+                (keyup)="updateTitle($event)"
+                name="title"
+                type="text"
+                color="accent"
+                required>
         </mat-form-field>
+        <button mat-icon-button
+        *ngIf="activeDocIsSaved()"
+        id='doc-to-pdf-btn'
+        aria-label="A PDF icon, indicating that this button is used to request a PDF of the current document."
+        color="accent"
+        (click)="triggerRequestDocPDF()">
+        <mat-icon>picture_as_pdf</mat-icon>
+        </button>
+    </mat-card>
     <quill-editor 
         #editor 
         [(ngModel)]="activeDoc.body"
