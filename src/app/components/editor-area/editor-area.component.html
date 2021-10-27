@@ -32,8 +32,12 @@
     </mat-card>
     <quill-editor 
         #editor 
+        id="#editor"
         [(ngModel)]="activeDoc.body"
-        class=custom-quill-editor 
-        (keyup)="updateText()">
+        [modules]="editorModules"
+        class="custom-quill-editor"
+        (keyup)="updateText()"
+        (onEditorCreated)="editorSetupAfterCreation($event)"
+        scrollingContainer="body">
     </quill-editor>
 </div>
