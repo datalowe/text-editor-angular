@@ -51,7 +51,7 @@ function rangeIsWholeComment(editor: Quill, range: RangeStatic): boolean {
 function removeCommentFromRange(editor: Quill, range: RangeStatic) {
     const text = editor.getText(range.index, range.length);
     const formats = editor.getFormat(range);
-    const commentFormatNames = ['onclick', 'comment-text', 'background'];
+    const commentFormatNames = ['onclick', 'comment-text', 'background', 'comment-id'];
     const nonCommentFormats: any = {};
 
     Object.keys(formats)
