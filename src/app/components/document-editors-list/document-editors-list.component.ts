@@ -61,4 +61,12 @@ export class DocumentEditorsListComponent implements OnInit {
   toggleShowEditors(): void {
     this.showEditors = !this.showEditors;
   }
+
+  getDocEditorsExceptOwner(): Editor[] {
+    return this.activeDoc.editors.filter(e => e.id !== this.activeDoc.owner.id);
+  }
+
+  getAllEditorsExceptOwner(): Editor[] {
+    return this.allEditors.filter(e => e.id !== this.activeDoc.owner.id);
+  }
 }

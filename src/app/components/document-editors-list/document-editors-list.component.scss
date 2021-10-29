@@ -67,3 +67,14 @@
 .mat-toolbar.editor-list-title {
     cursor: pointer;
 }
+
+.doc-owner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: #C147D7;
+    font-size: 1.2rem;
+    height: 1.5rem;
+    color: #fff;
+}

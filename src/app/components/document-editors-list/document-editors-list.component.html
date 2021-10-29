@@ -3,16 +3,19 @@
         <span>Editors</span>
         <mat-icon class="show-editors-arrow">{{ showEditors? "expand_less" : "expand_more" }}</mat-icon>
     </mat-toolbar>
+    <div *ngIf="showEditors" class="doc-owner" color="secondary">
+        <span>Owner: {{ activeDoc.owner.username }}</span>
+    </div>
     <mat-list *ngIf="!userIsDocumentOwner() && showEditors" class="list-editors-nonowner">
         <mat-list-item 
-            *ngFor="let editor of activeDoc.editors;"
+            *ngFor="let editor of getDocEditorsExceptOwner();"
             class="item-editor-nonowner">
             {{ editor.username }}
         </mat-list-item>
     </mat-list>
     <mat-selection-list  *ngIf="userIsDocumentOwner() && showEditors" class="list-editors-owner">
         <mat-list-option
-            *ngFor="let editor of allEditors;"
+            *ngFor="let editor of getAllEditorsExceptOwner();"
             (click)="toggleEditor(editor.id)"
             [selected]="isDocumentEditor(editor.id)"
             class="option-editor-owner">
