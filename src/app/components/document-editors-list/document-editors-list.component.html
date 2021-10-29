@@ -1,7 +1,7 @@
 <mat-card *ngIf="activeDoc.editors.length > 0 || userIsDocumentOwner()" fxFlex="100" fxLayoutGap="0" fxLayout="column" class="editor-list-wrapper">
-    <mat-toolbar color="primary" class="editor-list-title" margin=0>
+    <mat-toolbar color="primary" class="editor-list-title" margin=0 (click)="toggleShowEditors()">
         <span>Editors</span>
-        <mat-icon (click)="toggleShowEditors()">{{ showEditors? "expand_more" : "expand_less" }}</mat-icon>
+        <mat-icon class="show-editors-arrow">{{ showEditors? "expand_less" : "expand_more" }}</mat-icon>
     </mat-toolbar>
     <mat-list *ngIf="!userIsDocumentOwner() && showEditors" class="list-editors-nonowner">
         <mat-list-item 
