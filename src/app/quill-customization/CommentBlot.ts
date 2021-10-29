@@ -5,9 +5,9 @@ let Inline = Quill.import('blots/inline');
 export class CommentBlot extends Inline {
   static create(value: any) {
     const node = super.create(value);
-    node.setAttribute('onclick', 'showCommentEditor(this)');
-    node.setAttribute('comment-text', 'LONGPLACEHOLDER');
     node.setAttribute('comment-id', Math.round(Math.random() * 1000000));
+    node.setAttribute('comment-text', 'LONGPLACEHOLDER');
+    node.setAttribute('onclick', 'showCommentEditor(this)');
     node.click();
     return node;
   }

@@ -14,10 +14,10 @@ import { commentAtt, commentIdAtt, onclickAtt } from 'src/app/quill-customizatio
 import { commentHandlerGenerator } from 'src/app/quill-customization/commentHandler';
 
 // register custom blot/attributors related to comment functionality
-Quill.register(CommentBlot);
+Quill.register(commentIdAtt);
 Quill.register(commentAtt);
 Quill.register(onclickAtt);
-Quill.register(commentIdAtt);
+Quill.register(CommentBlot);
 
 @Component({
   selector: 'app-editor-area',
@@ -81,6 +81,17 @@ export class EditorAreaComponent implements OnInit {
   changeDoc(document: TextDocument): void {
     this.documentService.refreshAllDocs();
     this.documentService.swapActive(document);
+    // quill doesn't like the comment blot/element and tries to reshuffle
+    // its attributes upon user keyboard navigation in document until
+    // first input is passed in. I haven't been able to find out why.
+    // inserting and immediately deleting text as user in this manner
+    // works as a dirty fix for now.
+    setTimeout(
+      () => {
+        this.editorComponent.quillEditor.insertText(0, 'a', 'user');
+        this.editorComponent.quillEditor.deleteText(0, 1, 'user');
+      }, 5
+    )
   }
 
   newDoc(): void {
@@ -101,7 +112,7 @@ export class EditorAreaComponent implements OnInit {
     return Boolean(foundDoc);
   }
 
-  editorSetupAfterCreation(editor: any) {
+  editorSetupAfterCreation(editor: Quill) {
     editor
       .getModule("toolbar")
       .addHandler(
