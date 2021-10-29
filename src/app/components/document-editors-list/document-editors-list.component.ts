@@ -6,6 +6,8 @@ import { AuthService } from 'src/app/services/auth.service';
 import { DocumentService } from 'src/app/services/document.service';
 
 import { emptyDoc } from 'src/app/interfaces/TextDocument';
+import { DocInviteDialogComponent } from '../doc-invite-dialog/doc-invite-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-document-editors-list',
@@ -24,7 +26,8 @@ export class DocumentEditorsListComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private documentService: DocumentService
+    private documentService: DocumentService,
+    private inviteDialog: MatDialog
   ) {
     this.editorsSubscription = this.documentService
     .onEditorsUpdate()
@@ -68,5 +71,11 @@ export class DocumentEditorsListComponent implements OnInit {
 
   getAllEditorsExceptOwner(): Editor[] {
     return this.allEditors.filter(e => e.id !== this.activeDoc.owner.id);
+  }
+
+  openInviteDialog(): void {
+    this.inviteDialog.open(DocInviteDialogComponent, {
+      data: {docId: this.activeDoc.id}
+    });
   }
 }

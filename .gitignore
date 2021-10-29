@@ -1,6 +1,7 @@
 # custom (not Angular default)
 cypress/videos
 cypress/screenshots
+.vscode/
 
 # compiled output
 /dist

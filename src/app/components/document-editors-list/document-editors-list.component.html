@@ -1,7 +1,17 @@
 <mat-card *ngIf="activeDoc.editors.length > 0 || userIsDocumentOwner()" fxFlex="100" fxLayoutGap="0" fxLayout="column" class="editor-list-wrapper">
-    <mat-toolbar color="primary" class="editor-list-title" margin=0 (click)="toggleShowEditors()">
-        <span>Editors</span>
-        <mat-icon class="show-editors-arrow">{{ showEditors? "expand_less" : "expand_more" }}</mat-icon>
+    <mat-toolbar color="primary" class="editor-list-toolbar" margin=0>
+        <div (click)="toggleShowEditors()" class="editor-list-toggle">
+            <span>Editors</span>
+            <mat-icon class="show-editors-arrow">{{ showEditors? "expand_less" : "expand_more" }}</mat-icon>
+        </div>
+        <button
+            *ngIf="showEditors"
+            class="email-editor-button"
+            mat-icon-button
+            aria-label="Button with a paper plane icon, indicating that you can e-mail new editors here."
+            (click)="openInviteDialog()">
+            <mat-icon>send</mat-icon>
+        </button>
     </mat-toolbar>
     <div *ngIf="showEditors" class="doc-owner" color="secondary">
         <span>Owner: {{ activeDoc.owner.username }}</span>

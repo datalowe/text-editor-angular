@@ -2,10 +2,10 @@ import {NgModule} from '@angular/core';
 import {APOLLO_OPTIONS} from 'apollo-angular';
 import {ApolloClientOptions, ApolloLink, InMemoryCache} from '@apollo/client/core';
 import {HttpLink} from 'apollo-angular/http';
-import { backendRootUrl } from './global-variables';
+import { backendRootUrl } from '../global-variables';
 
 import { setContext } from '@apollo/client/link/context';
-import { getAPIToken } from './util-functions/getAPIToken';
+import { getAPIToken } from '../util-functions/getAPIToken';
 
 const uri = `${backendRootUrl}/editor-api/graphql`; // graphQL backend endpoint
 

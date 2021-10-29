@@ -2,6 +2,11 @@
     padding: 0;
     margin: 0 0 1rem;
 }
+.editor-list-toggle {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
 // .list-editors-nonowner {
 //     max-width: 20rem;
 //     display: flex;
@@ -60,14 +65,6 @@
     }
 }
 
-.mat-icon.show-editors-arrow:hover {
-    cursor: pointer;
-}
-
-.mat-toolbar.editor-list-title {
-    cursor: pointer;
-}
-
 .doc-owner {
     display: flex;
     align-items: center;
@@ -77,4 +74,8 @@
     font-size: 1.2rem;
     height: 1.5rem;
     color: #fff;
+}
+
+.email-editor-button {
+    margin-left: auto;
 }

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { AppRoutingModule } from './app-routing.module';
+import { AppRoutingModule } from './routing/app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 
@@ -27,12 +27,14 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCheckboxModule } from '@angular/material/checkbox'; 
 import { MatIconModule } from '@angular/material/icon'; 
 import { MatListModule } from '@angular/material/list';
+import { MatDialogModule } from '@angular/material/dialog'; 
 
 import { backendRootUrl } from './global-variables';
 import { LoggedInGuard } from './guards/logged-in.guard';
 import { NotLoggedInGuard } from './guards/not-logged-in.guard';
 import { DocumentEditorsListComponent } from './components/document-editors-list/document-editors-list.component';
-import { GraphQLModule } from './graphql.module';
+import { GraphQLModule } from './graphql/graphql.module';
+import { DocInviteDialogComponent } from './components/doc-invite-dialog/doc-invite-dialog.component';
 
 const config: SocketIoConfig = { 
   url: backendRootUrl, 
@@ -55,6 +57,7 @@ const appRoutes: Routes = [
     LoginAreaComponent,
     RegistrationAreaComponent,
     DocumentEditorsListComponent,
+    DocInviteDialogComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -65,6 +68,7 @@ const appRoutes: Routes = [
     MatButtonModule,
     MatCardModule,
     MatCheckboxModule,
+    MatDialogModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
