@@ -16,6 +16,7 @@ import { Editor } from '../interfaces/Editor';
 import { emptyDoc } from 'src/app/interfaces/TextDocument';
 import { stripTypename } from '../graphql/stripTypename';
 import { GQL_CREATE_NEW_DOCUMENT, GQL_GET_ALL_DOCUMENTS, GQL_GET_EDITORS, GQL_UPDATE_DOCUMENT } from '../graphql/graphql-queries';
+import { docToGQLCreateObj, docToGQLUpdateObj, toggleEditorById } from './service-helpers/document-helpers';
 
 @Injectable({
   providedIn: 'root'
@@ -76,43 +77,33 @@ export class DocumentService {
   }
 
   createDocument(): void {
-    const gqlVars = {
-      'title': this.activeDoc.title,
-      'body': this.activeDoc.body,
-      'ownerId': this.authService.getOwnUserId(),
-    };
+    const gqlCreateObj: any = docToGQLCreateObj(this.activeDoc, this.authService.getOwnUserId());
 
     this.apollo.mutate({
       mutation: GQL_CREATE_NEW_DOCUMENT,
-      variables: gqlVars
+      variables: gqlCreateObj
     }).subscribe(
       () => {
         this.refreshAllDocs();
       },
       (error) => {
-        console.error('New document could not be created with variables:', gqlVars);
+        console.error('New document could not be created with variables:', gqlCreateObj);
       }
     );    
   }
 
   updateDocument(): void {
-    const gqlVars = {
-      'id': this.activeDoc.id,
-      'title': this.activeDoc.title,
-      'body': this.activeDoc.body,
-      'ownerId': this.authService.getOwnUserId(),
-      'editorIds': this.activeDoc.editors.map(editor => editor.id)
-    };
+    const gqlUpdateObj: any = docToGQLUpdateObj(this.activeDoc);
 
     this.apollo.mutate({
       mutation: GQL_UPDATE_DOCUMENT,
-      variables: gqlVars
+      variables: gqlUpdateObj
     }).subscribe(
       () => {
         this.refreshAllDocs();
       },
       (error) => {
-        console.error('Document could not be updated with variables:', gqlVars);
+        console.error('Document could not be updated with variables:', gqlUpdateObj);
       }
     );
   }
@@ -171,17 +162,8 @@ export class DocumentService {
   }
 
   toggleActiveEditor(editorId: string): void {
-    if (this.activeDoc.editors.find(e => e.id === editorId)) {
-      this.activeDoc.editors = this.activeDoc.editors.filter(e => e.id !== editorId);
-    } else {
-      const matchEditor = this.allEditors.find(e => e.id === editorId);
-
-      if (matchEditor) {
-        this.activeDoc.editors.push(matchEditor);
-      }
-    }
-    this
-      .upsertDocument();
+    this.activeDoc.editors = toggleEditorById(this.activeDoc.editors, this.allEditors, editorId);
+    this.upsertDocument();
   }
 
   onActiveDocUpdate(): Observable<any> {
