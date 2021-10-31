@@ -41,7 +41,7 @@ describe('Registration form', () => {
 
       cy.wait('@requestNewUser').its('request.body.username').should('eq', registrationUser.username);
 
-      // is directed to login after registering
-      cy.contains('Login');
+      // is directed to text editor after registering
+      cy.contains('Document Title');
     });
 });
