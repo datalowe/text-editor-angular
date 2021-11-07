@@ -12,6 +12,7 @@ import { customQuillModules } from 'src/app/quill-customization/customQuillModul
 import { CommentBlot } from 'src/app/quill-customization/CommentBlot';
 import { commentAtt, commentIdAtt, onclickAtt } from 'src/app/quill-customization/CustomAttributors';
 import { commentHandlerGenerator } from 'src/app/quill-customization/commentHandler';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 // register custom blot/attributors related to comment functionality
 Quill.register(commentIdAtt);
@@ -37,7 +38,9 @@ export class EditorAreaComponent implements OnInit {
   // tool
   editorModules= customQuillModules;
 
-  constructor(private documentService: DocumentService) {
+  constructor(
+    private documentService: DocumentService,
+    private _snackBar: MatSnackBar) {
     this.activeDocSubscription = this.documentService
       .onActiveDocUpdate()
       .subscribe(
@@ -71,9 +74,10 @@ export class EditorAreaComponent implements OnInit {
 
   saveText(): void {
     if (!this.activeDoc.title) {
-      alert('Please add a title.')
+      this.openWarningSnackBar('Please add a title before saving', 'Dismiss', 5000);
       return;
     }
+    this._snackBar.dismiss();
     this.documentService
       .upsertDocument();
   }
@@ -121,4 +125,10 @@ export class EditorAreaComponent implements OnInit {
       );
   }
 
+  openWarningSnackBar(message: string, action: string, duration: number) {
+    this._snackBar.open(message, action, {
+      duration: duration,
+      panelClass: 'snack-bar-warning'
+    });
+  }
 }

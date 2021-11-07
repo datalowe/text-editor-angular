@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 
 import { requestEmailInvite } from 'src/app/util-functions/requestEmailInvite';
 import { InvalidEmailError } from 'src/app/util-functions/custom-errors';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface InviteDialogData {
   docId: string;
@@ -22,22 +23,25 @@ export class DocInviteDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<DocInviteDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: InviteDialogData) { }
+    @Inject(MAT_DIALOG_DATA) public data: InviteDialogData,
+    private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
   }
 
   async triggerEmailInvite(): Promise<void> {
-    console.log('activeDocId', this.data.docId);
     try {
       await requestEmailInvite(this.data.docId, this.email);
-      alert('E-mail invitation sent!');
+      this.openSnackBar('E-mail invitation sent!', 'Dismiss', 2000);
+      this.dialogRef.close();
     } catch (e) {
+      let errMsg: string;
       if (e instanceof InvalidEmailError) {
-        alert("The e-mail you provided appears to be incorrect. Please double check it.");
-        return;
+        errMsg = 'The e-mail you provided appears to be incorrect.';
+      } else {
+        errMsg = 'E-mail invitation attempt failed for reasons unknown. Please try again later.';
       }
-      alert('E-mail invitation attempt failed for reasons unknown. Please try again later.');
+      this.openSnackBar(errMsg, 'Dismiss', 100000);
     }
   }
 
@@ -47,9 +51,15 @@ export class DocInviteDialogComponent implements OnInit {
 
   onSendClick(): void {
     if (!this.email) {
-      alert('Please enter an e-mail to send to.');
+      this.openSnackBar('Please enter an e-mail to send to.', 'Dismiss', 3000);
       return;
     }
     this.triggerEmailInvite();
+  }
+
+  openSnackBar(message: string, action: string, duration: number) {
+    this._snackBar.open(message, action, {
+      duration: duration
+    });
   }
 }

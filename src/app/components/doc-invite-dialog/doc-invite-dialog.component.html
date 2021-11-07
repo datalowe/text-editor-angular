@@ -4,7 +4,10 @@
   <p>If so, please enter their e-mail address.</p>
   <mat-form-field appearance="fill">
     <mat-label>E-mail address</mat-label>
-    <input matInput [(ngModel)]="email">
+    <input
+      matInput
+      pattern="[^@]+@[^@.]+\.[^@.]+"
+      [(ngModel)]="email">
   </mat-form-field>
 </div>
 <div mat-dialog-actions class="invite-dialog-actions">

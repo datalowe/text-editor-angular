@@ -28,6 +28,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon'; 
 import { MatListModule } from '@angular/material/list';
 import { MatDialogModule } from '@angular/material/dialog'; 
+import { MatSnackBarModule } from '@angular/material/snack-bar'; 
 
 import { backendRootUrl } from './global-variables';
 import { LoggedInGuard } from './guards/logged-in.guard';
@@ -46,6 +47,7 @@ const appRoutes: Routes = [
   {path: 'register', component: RegistrationAreaComponent, canActivate: [NotLoggedInGuard]},
   {path: '', redirectTo: '/login', pathMatch: 'full'},
   {path: 'editor', component: EditorAreaComponent, canActivate: [LoggedInGuard]},
+  {path: '', redirectTo: '/login', pathMatch: 'prefix'}
 ];
 
 @NgModule({
@@ -73,6 +75,7 @@ const appRoutes: Routes = [
     MatIconModule,
     MatInputModule,
     MatListModule,
+    MatSnackBarModule,
     MatToolbarModule,
     QuillModule.forRoot(),
     RouterModule.forRoot(appRoutes, { enableTracing: false }),
