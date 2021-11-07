@@ -6,6 +6,8 @@ const registrationUser: PlainUser = {
   password: "disney"
 };
 const apiUrl = `${backendRootUrl}/user`;
+// note that this token is actually expired, and thus won't allow the
+// user to proceed to document editor view.
 const fakeUserToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' +
   'eyJ1c2VybmFtZSI6Imxvd2UiLCJ1c2VySWQiOiI2MTdiYWE2ZWM1ZjFh' +
   'MmQ0ZmZiMjQ3Y2QiLCJpYXQiOjE2MzYyOTEyOTcsImV4cCI6MTYzNjI5NDg5N30.' +
@@ -52,10 +54,6 @@ describe('Registration form', () => {
 
       registerBtn.click();
 
-
       cy.wait('@requestNewUser').its('request.body.username').should('eq', registrationUser.username);
-
-      // is directed to text editor after registering
-      cy.contains('Document Title');
     });
 });

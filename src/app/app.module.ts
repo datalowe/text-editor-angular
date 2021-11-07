@@ -36,6 +36,7 @@ import { NotLoggedInGuard } from './guards/not-logged-in.guard';
 import { DocumentEditorsListComponent } from './components/document-editors-list/document-editors-list.component';
 import { GraphQLModule } from './graphql/graphql.module';
 import { DocInviteDialogComponent } from './components/doc-invite-dialog/doc-invite-dialog.component';
+import { QuillWrapperComponent } from './components/quill-wrapper/quill-wrapper.component';
 
 const config: SocketIoConfig = { 
   url: backendRootUrl, 
@@ -60,6 +61,7 @@ const appRoutes: Routes = [
     RegistrationAreaComponent,
     DocumentEditorsListComponent,
     DocInviteDialogComponent,
+    QuillWrapperComponent,
   ],
   imports: [
     AppRoutingModule,

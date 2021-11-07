@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 
 import { Observable, Subject } from 'rxjs';
 
@@ -8,8 +7,6 @@ import { Socket } from 'ngx-socket-io';
 import { Apollo, QueryRef } from 'apollo-angular';
 
 import { TextDocument } from 'src/app/interfaces/TextDocument';
-import { backendRootUrl } from '../global-variables';
-import { CookieService } from 'ngx-cookie-service';
 import { AuthService } from './auth.service';
 import { Editor } from '../interfaces/Editor';
 
@@ -31,12 +28,9 @@ export class DocumentService {
   private editorsSubject: Subject<any> = new Subject<any>();
   private allDocsSubject: Subject<any> = new Subject<any>();
   private allDocsWatchQuery: QueryRef<any>;
-  private apiUrl: string = `${backendRootUrl}/editor-api/document`;
 
   constructor(
-    private httpClient: HttpClient,
     private socket: Socket,
-    private cookieService: CookieService,
     private authService: AuthService,
     private apollo: Apollo) {
     this.socket.on('docBodyUpdate',

@@ -56,7 +56,7 @@ export class AuthService {
   };
 
   /*
-  * No sensitive data are reached purely through the frontend, so there's no
+  * No sensitive data are reached just by reaching the editor area, so there's no
   * need to validate user JWT's against the backend. Only malicious users should
   * run into trouble.
   */

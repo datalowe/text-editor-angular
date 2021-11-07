@@ -30,14 +30,8 @@
         <mat-icon>picture_as_pdf</mat-icon>
         </button>
     </mat-card>
-    <quill-editor 
-        #editor 
-        id="#editor"
-        [(ngModel)]="activeDoc.body"
-        [modules]="editorModules"
-        class="custom-quill-editor"
-        (keyup)="updateText()"
-        (onEditorCreated)="editorSetupAfterCreation($event)"
-        scrollingContainer="body">
-    </quill-editor>
+    <app-quill-wrapper
+        #quillwrapper
+        id="#quillwrapper">
+    </app-quill-wrapper>
 </div>
