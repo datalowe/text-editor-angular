@@ -19,8 +19,15 @@
             <mat-icon>fiber_new</mat-icon>
         </button>
         <button mat-icon-button 
+            id='toggle-code-btn'
+            aria-label="An icon showing a single backslash in angular brackets, indicating that this button is for toggling code mode."
+            color="accent"
+            (click)="toggleCodeMode()">
+            <mat-icon>code</mat-icon>
+        </button>
+        <button mat-icon-button 
             id='toggle-list-btn'
-            aria-label="An icon reading 'new', indicating that this is a button for creating a new document."
+            aria-label="A list icon, indicating that this button is for showing/hiding a list of saved documents."
             color="accent"
             (click)="toggleShowList()">
             <mat-icon>{{showDocList ? "expand_less" : "list" }}</mat-icon>

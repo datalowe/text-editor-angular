@@ -6,7 +6,7 @@ import { DocumentService } from './document.service';
 import { TextDocument } from '../interfaces/TextDocument';
 import { asyncData } from 'src/testing/async-observable-helpers';
 
-const emptyDoc: TextDocument = {
+const regularEmptyDoc: TextDocument = {
   id: '',
   title: '',
   body: ''
@@ -68,11 +68,11 @@ describe('DocumentService', () => {
   });
 
   it('#upsertDocument calls #createDocument and in turn httpClient.post when active doc is empty', (done: DoneFn) => {
-    httpClientSpy.post.and.returnValue(asyncData(emptyDoc));
+    httpClientSpy.post.and.returnValue(asyncData(regularEmptyDoc));
     
     docService.upsertDocument().subscribe(
       (doc) => {
-        expect(doc).toEqual(emptyDoc);
+        expect(doc).toEqual(regularEmptyDoc);
         done();
       },
       done.fail
@@ -84,7 +84,7 @@ describe('DocumentService', () => {
   });
 
   it("#updateActiveTitle changes document title and triggers subject event emission", () => {
-    const testDoc = { ...emptyDoc };
+    const testDoc = { ...regularEmptyDoc };
     testDoc.title = filledDoc.title;
 
     docService.onActiveDocUpdate().subscribe((doc) => expect(doc).toEqual(testDoc));
@@ -92,7 +92,7 @@ describe('DocumentService', () => {
   });
 
   it("#updateActiveBody changes document body and triggers subject event emission", () => {
-    const testDoc = { ...emptyDoc };
+    const testDoc = { ...regularEmptyDoc };
     testDoc.body = filledDoc.body;
 
     docService.onActiveDocUpdate().subscribe((doc) => expect(doc).toEqual(testDoc));
@@ -107,7 +107,7 @@ describe('DocumentService', () => {
   it("#resetActiveDoc makes document return to empty state and triggers subject emission", fakeAsync(() => {
     docService.swapActive(filledDoc);
     tick(1);
-    docService.onActiveDocUpdate().subscribe((doc) => expect(doc).toEqual(emptyDoc));
+    docService.onActiveDocUpdate().subscribe((doc) => expect(doc).toEqual(regularEmptyDoc));
     docService.resetActiveDoc();
   })
   );

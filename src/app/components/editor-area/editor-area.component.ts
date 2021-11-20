@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { TextDocument } from 'src/app/interfaces/TextDocument';
 import { DocumentService } from 'src/app/services/document.service';
 
-import { emptyDoc } from 'src/app/interfaces/TextDocument';
+import { regularEmptyDoc } from 'src/app/interfaces/TextDocument';
 import { requestDocPDF } from 'src/app/util-functions/requestDocPDF';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { QuillWrapperComponent } from '../quill-wrapper/quill-wrapper.component';
@@ -20,7 +20,7 @@ export class EditorAreaComponent implements OnInit {
   savedDocs: TextDocument[] = [];
   activeDocSubscription: Subscription;
   activeDoc: TextDocument = {
-    ...emptyDoc
+    ...regularEmptyDoc
   };
   @ViewChild('quillwrapper') quillWrapper: QuillWrapperComponent;
 

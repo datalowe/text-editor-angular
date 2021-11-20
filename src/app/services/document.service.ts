@@ -6,11 +6,11 @@ import { Socket } from 'ngx-socket-io';
 
 import { Apollo, QueryRef } from 'apollo-angular';
 
-import { TextDocument } from 'src/app/interfaces/TextDocument';
+import { codeEmptyDoc, TextDocument } from 'src/app/interfaces/TextDocument';
 import { AuthService } from './auth.service';
 import { Editor } from '../interfaces/Editor';
 
-import { emptyDoc } from 'src/app/interfaces/TextDocument';
+import { regularEmptyDoc } from 'src/app/interfaces/TextDocument';
 import { stripTypename } from '../graphql/stripTypename';
 import { GQL_CREATE_NEW_DOCUMENT, GQL_GET_ALL_DOCUMENTS, GQL_GET_EDITORS, GQL_UPDATE_DOCUMENT } from '../graphql/graphql-queries';
 import { docToGQLCreateObj, docToGQLUpdateObj, toggleEditorById } from './service-helpers/document-helpers';
@@ -20,7 +20,7 @@ import { docToGQLCreateObj, docToGQLUpdateObj, toggleEditorById } from './servic
 })
 export class DocumentService {
   private activeDoc: TextDocument = {
-    ...emptyDoc
+    ...regularEmptyDoc
   };
   private allEditors: Editor[] = [];
   private allDocs: TextDocument[] = [];
@@ -28,6 +28,7 @@ export class DocumentService {
   private editorsSubject: Subject<any> = new Subject<any>();
   private allDocsSubject: Subject<any> = new Subject<any>();
   private allDocsWatchQuery: QueryRef<any>;
+  private codeModeOn: boolean = false;
 
   constructor(
     private socket: Socket,
@@ -51,8 +52,7 @@ export class DocumentService {
       .subscribe(
         (result: any) => {
           if (result?.data?.documents) {
-            this.allDocs = result.data.documents.map((d: any) => stripTypename(d));
-            
+            this.allDocs = result.data.documents.map((d: any) => stripTypename(d));            
             this.allDocsSubject.next(this.allDocs);
           }
         }
@@ -122,9 +122,16 @@ export class DocumentService {
     if (this.activeDoc.id) {
       this.socket.emit('leaveRoom', this.activeDoc.id);
     }
-    this.activeDoc = {
-      ...emptyDoc
+    if (this.codeModeOn) {
+      this.activeDoc = {
+        ...codeEmptyDoc
+      }
+    } else {
+      this.activeDoc = {
+        ...regularEmptyDoc
+      }
     }
+
     this.activeDocSubject.next(this.activeDoc);
   }
 
@@ -158,6 +165,15 @@ export class DocumentService {
   toggleActiveEditor(editorId: string): void {
     this.activeDoc.editors = toggleEditorById(this.activeDoc.editors, this.allEditors, editorId);
     this.upsertDocument();
+  }
+
+  toggleCodeMode(): void {
+    this.codeModeOn = !this.codeModeOn;
+    this.resetActiveDoc();
+  }
+
+  isCodeModeOn(): boolean {
+    return this.codeModeOn;
   }
 
   onActiveDocUpdate(): Observable<any> {

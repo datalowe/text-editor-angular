@@ -9,7 +9,7 @@ import { CommentBlot } from 'src/app/quill-customization/CommentBlot';
 import { commentAtt, commentIdAtt, onclickAtt } from 'src/app/quill-customization/CustomAttributors';
 import { commentHandlerGenerator } from 'src/app/quill-customization/commentHandler';
 import { Subscription } from 'rxjs';
-import { emptyDoc, TextDocument } from 'src/app/interfaces/TextDocument';
+import { regularEmptyDoc, TextDocument } from 'src/app/interfaces/TextDocument';
 
 // register custom blot/attributors related to comment functionality
 Quill.register(commentIdAtt);
@@ -26,7 +26,7 @@ export class QuillWrapperComponent implements OnInit {
   @ViewChild('editor') editorComponent: QuillEditorComponent;
   activeDocSubscription: Subscription;
   activeDoc: TextDocument = {
-    ...emptyDoc
+    ...regularEmptyDoc
   };
 
   // use customized modules, ie an editor toolbar that includes comment
