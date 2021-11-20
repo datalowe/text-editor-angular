@@ -101,4 +101,8 @@ export class EditorAreaComponent implements OnInit {
       panelClass: 'snack-bar-warning'
     });
   }
+
+  isCodeModeOn(): boolean {
+    return this.documentService.isCodeModeOn();
+  }
 }

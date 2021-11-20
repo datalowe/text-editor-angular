@@ -31,6 +31,7 @@
         </button>
     </mat-card>
     <app-quill-wrapper
+        *ngIf="!isCodeModeOn()"
         #quillwrapper
         id="#quillwrapper">
     </app-quill-wrapper>
