@@ -37,6 +37,7 @@ import { DocumentEditorsListComponent } from './components/document-editors-list
 import { GraphQLModule } from './graphql/graphql.module';
 import { DocInviteDialogComponent } from './components/doc-invite-dialog/doc-invite-dialog.component';
 import { QuillWrapperComponent } from './components/quill-wrapper/quill-wrapper.component';
+import { CodeMirrorWrapperComponent } from './components/code-mirror-wrapper/code-mirror-wrapper.component';
 
 const config: SocketIoConfig = { 
   url: backendRootUrl, 
@@ -62,6 +63,7 @@ const appRoutes: Routes = [
     DocumentEditorsListComponent,
     DocInviteDialogComponent,
     QuillWrapperComponent,
+    CodeMirrorWrapperComponent,
   ],
   imports: [
     AppRoutingModule,

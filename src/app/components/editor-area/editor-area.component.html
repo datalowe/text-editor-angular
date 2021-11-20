@@ -35,4 +35,9 @@
         #quillwrapper
         id="#quillwrapper">
     </app-quill-wrapper>
+    <app-code-mirror-wrapper
+        *ngIf="!isCodeModeOn()"
+        #quillwrapper
+        id="#quillwrapper">
+    </app-code-mirror-wrapper>
 </div>
