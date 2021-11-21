@@ -1,8 +1,9 @@
 <ngx-codemirror
+  #cmeditor
   [(ngModel)]="activeDoc.body"
   [options]="{
     lineNumbers: true,
-    theme: 'paraiso-light',
-    mode: 'markdown'
+    theme: 'dracula',
+    mode: 'javascript'
   }"
 ></ngx-codemirror>

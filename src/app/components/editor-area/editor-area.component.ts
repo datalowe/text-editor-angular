@@ -66,6 +66,10 @@ export class EditorAreaComponent implements OnInit {
   changeDoc(document: TextDocument): void {
     this.documentService.refreshAllDocs();
     this.documentService.swapActive(document);
+
+    if (this.documentService.isCodeModeOn()) {
+      return;
+    }
     // quill doesn't like the comment blot/element and tries to reshuffle
     // its attributes upon user keyboard navigation in document until
     // first input is passed in. I haven't been able to find out why.
