@@ -1,1 +1,8 @@
-<p>code-mirror-wrapper works!</p>
+<ngx-codemirror
+  [(ngModel)]="activeDoc.body"
+  [options]="{
+    lineNumbers: true,
+    theme: 'paraiso-light',
+    mode: 'markdown'
+  }"
+></ngx-codemirror>

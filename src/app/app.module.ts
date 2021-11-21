@@ -10,6 +10,7 @@ import { AppComponent } from './app.component';
 import { CookieService } from 'ngx-cookie-service';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { QuillModule } from 'ngx-quill';
+import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 
 import { EditorAreaComponent } from './components/editor-area/editor-area.component';
 import { EditorToolbarComponent } from './components/editor-toolbar/editor-toolbar.component';
@@ -85,7 +86,8 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes, { enableTracing: false }),
     SocketIoModule.forRoot(config),
     BrowserAnimationsModule,
-    GraphQLModule
+    GraphQLModule,
+    CodemirrorModule
   ],
   providers: [
     CookieService

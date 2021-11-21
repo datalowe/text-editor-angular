@@ -3,6 +3,10 @@
 @import '~quill/dist/quill.bubble.css';
 @import '~quill/dist/quill.snow.css';
 
+// code-mirror imports, as instructed @ https://www.npmjs.com/package/@ctrl/ngx-codemirror
+@import '~codemirror/lib/codemirror';
+@import '~codemirror/theme/paraiso-light';
+
 body {
     background-color: white;
     margin: 0;
