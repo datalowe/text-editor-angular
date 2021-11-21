@@ -7,3 +7,16 @@
     mode: 'javascript'
   }"
 ></ngx-codemirror>
+
+<div class="run-code-wrapper">
+  <button mat-icon-button
+  id='run-code-btn'
+  aria-label="A running person icon, indicating that this button is used to run entered code."
+  color="accent"
+  class="run-code-btn"
+  (click)="triggerExecuteCode()">
+  <mat-icon class="run-icon">directions_run</mat-icon>
+  </button>
+</div>
+
+<pre *ngIf="codeOutput" class="code-output">{{ codeOutput }}</pre>
