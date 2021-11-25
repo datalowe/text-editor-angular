@@ -1,24 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { QuillEditorComponent } from 'ngx-quill';
 import { Subscription } from 'rxjs';
 
 import { TextDocument } from 'src/app/interfaces/TextDocument';
 import { DocumentService } from 'src/app/services/document.service';
 
-import { emptyDoc } from 'src/app/interfaces/TextDocument';
+import { regularEmptyDoc } from 'src/app/interfaces/TextDocument';
 import { requestDocPDF } from 'src/app/util-functions/requestDocPDF';
-import Quill from 'quill';
-import { customQuillModules } from 'src/app/quill-customization/customQuillModules';
-import { CommentBlot } from 'src/app/quill-customization/CommentBlot';
-import { commentAtt, commentIdAtt, onclickAtt } from 'src/app/quill-customization/CustomAttributors';
-import { commentHandlerGenerator } from 'src/app/quill-customization/commentHandler';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
-// register custom blot/attributors related to comment functionality
-Quill.register(commentIdAtt);
-Quill.register(commentAtt);
-Quill.register(onclickAtt);
-Quill.register(CommentBlot);
+import { QuillWrapperComponent } from '../quill-wrapper/quill-wrapper.component';
 
 @Component({
   selector: 'app-editor-area',
@@ -27,16 +16,13 @@ Quill.register(CommentBlot);
 })
 export class EditorAreaComponent implements OnInit {
 
-  @ViewChild('editor') editorComponent: QuillEditorComponent;
   savedDocsSubscription: Subscription;
   savedDocs: TextDocument[] = [];
   activeDocSubscription: Subscription;
   activeDoc: TextDocument = {
-    ...emptyDoc
+    ...regularEmptyDoc
   };
-  // use customized modules, ie an editor toolbar that includes comment
-  // tool
-  editorModules= customQuillModules;
+  @ViewChild('quillwrapper') quillWrapper: QuillWrapperComponent;
 
   constructor(
     private documentService: DocumentService,
@@ -62,11 +48,6 @@ export class EditorAreaComponent implements OnInit {
       .startEditorsSubscription();
   }
 
-  updateText(): void {
-    this.documentService
-      .updateActiveBody(this.editorComponent.quillEditor.root.innerHTML);
-  }
-
   updateTitle(event: any): void {
     this.documentService
       .updateActiveTitle(event.target.value);
@@ -85,6 +66,10 @@ export class EditorAreaComponent implements OnInit {
   changeDoc(document: TextDocument): void {
     this.documentService.refreshAllDocs();
     this.documentService.swapActive(document);
+
+    if (this.documentService.isCodeModeOn()) {
+      return;
+    }
     // quill doesn't like the comment blot/element and tries to reshuffle
     // its attributes upon user keyboard navigation in document until
     // first input is passed in. I haven't been able to find out why.
@@ -92,8 +77,7 @@ export class EditorAreaComponent implements OnInit {
     // works as a dirty fix for now.
     setTimeout(
       () => {
-        this.editorComponent.quillEditor.insertText(0, 'a', 'user');
-        this.editorComponent.quillEditor.deleteText(0, 1, 'user');
+        this.quillWrapper.fakeUserAction();
       }, 5
     )
   }
@@ -101,7 +85,6 @@ export class EditorAreaComponent implements OnInit {
   newDoc(): void {
     this.documentService.refreshAllDocs();
     this.documentService.resetActiveDoc();
-    this.editorComponent.quillEditor.setText('');
   }
 
   triggerRequestDocPDF(): void {
@@ -116,19 +99,14 @@ export class EditorAreaComponent implements OnInit {
     return Boolean(foundDoc);
   }
 
-  editorSetupAfterCreation(editor: Quill) {
-    editor
-      .getModule("toolbar")
-      .addHandler(
-        'comment',
-        commentHandlerGenerator(editor)
-      );
-  }
-
   openWarningSnackBar(message: string, action: string, duration: number) {
     this._snackBar.open(message, action, {
       duration: duration,
       panelClass: 'snack-bar-warning'
     });
+  }
+
+  isCodeModeOn(): boolean {
+    return this.documentService.isCodeModeOn();
   }
 }

@@ -5,7 +5,7 @@ import { TextDocument } from 'src/app/interfaces/TextDocument';
 import { AuthService } from 'src/app/services/auth.service';
 import { DocumentService } from 'src/app/services/document.service';
 
-import { emptyDoc } from 'src/app/interfaces/TextDocument';
+import { regularEmptyDoc } from 'src/app/interfaces/TextDocument';
 import { DocInviteDialogComponent } from '../doc-invite-dialog/doc-invite-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -20,7 +20,7 @@ export class DocumentEditorsListComponent implements OnInit {
   usernamesSubscription: Subscription;
   activeDocSubscription: Subscription;
   activeDoc: TextDocument = {
-    ...emptyDoc
+    ...regularEmptyDoc
   };
   showEditors: boolean = false;
 

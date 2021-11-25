@@ -6,6 +6,7 @@ export function docToGQLCreateObj(doc: TextDocument, ownerId: string): any {
         'title': doc.title,
         'body': doc.body,
         'ownerId': ownerId,
+        'type': doc.type
     };
 
     return gqlDocCreateVars;
@@ -17,7 +18,8 @@ export function docToGQLUpdateObj(doc: TextDocument): any {
         'title': doc.title,
         'body': doc.body,
         'ownerId': doc.owner.id,
-        'editorIds': doc.editors.map(editor => editor.id)
+        'editorIds': doc.editors.map(editor => editor.id),
+        'type': doc.type
     };
 
     return gqlDocUpdateVars

@@ -23,6 +23,7 @@ export const GQL_GET_ALL_DOCUMENTS = gql`
           id
           username
       }
+      type
     }
   }
 `;
@@ -32,11 +33,13 @@ export const GQL_CREATE_NEW_DOCUMENT = gql`
         $title: String!
         $body: String!
         $ownerId: String!
+        $type: String!
     ) {
         createDocument(
             title: $title
             body: $body
             ownerId: $ownerId
+            type: $type
         ) {
           title
           body
@@ -51,6 +54,7 @@ export const GQL_UPDATE_DOCUMENT = gql`
         $body: String!
         $ownerId: String!
         $editorIds: [String]!
+        $type: String!
     ) {
         updateDocument(
             id: $id
@@ -58,19 +62,9 @@ export const GQL_UPDATE_DOCUMENT = gql`
             body: $body
             ownerId: $ownerId
             editorIds: $editorIds
+            type: $type
         ) {
           title
         }
     }
 `;
-
-// `mutation UpdateDocument($id: String!, $title: String!, $body: String!, $ownerId: String!, $editorIds: [String]!) {
-//  updateDocument(
-//  id: $id
-//  title: $title
-//  body: $body
-//  ownerId: $ownerId
-//  editorIds: $editorIds
-//  )
-// }
-// `

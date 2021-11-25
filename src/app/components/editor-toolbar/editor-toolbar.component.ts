@@ -2,6 +2,7 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { TextDocument } from 'src/app/interfaces/TextDocument';
+import { DocumentService } from 'src/app/services/document.service';
 import { UiService } from 'src/app/services/ui.service';
 
 @Component({
@@ -19,7 +20,7 @@ export class EditorToolbarComponent implements OnInit {
   showDocList: boolean = false;
   subscription: Subscription; 
 
-  constructor(private uiService: UiService) {
+  constructor(private uiService: UiService, private documentService: DocumentService) {
     this.subscription = this.uiService
       .onToggleDocList()
       .subscribe(
@@ -44,5 +45,9 @@ export class EditorToolbarComponent implements OnInit {
 
   toggleShowList(): void {
     this.uiService.toggleShowDocList();
+  }
+
+  toggleCodeMode(): void {
+    this.documentService.toggleCodeMode();
   }
 }

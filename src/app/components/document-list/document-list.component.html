@@ -1,7 +1,7 @@
 <mat-card class="document-list-card">
     <mat-action-list>
         <button mat-list-item
-            *ngFor="let doc of documents"
+            *ngFor="let doc of getCurrentModeDocs();"
             (click)="onClickDoc(doc)"
             class="document-list-item"
         >{{doc.title}}</button>

@@ -10,6 +10,7 @@ import { AppComponent } from './app.component';
 import { CookieService } from 'ngx-cookie-service';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { QuillModule } from 'ngx-quill';
+import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 
 import { EditorAreaComponent } from './components/editor-area/editor-area.component';
 import { EditorToolbarComponent } from './components/editor-toolbar/editor-toolbar.component';
@@ -36,6 +37,8 @@ import { NotLoggedInGuard } from './guards/not-logged-in.guard';
 import { DocumentEditorsListComponent } from './components/document-editors-list/document-editors-list.component';
 import { GraphQLModule } from './graphql/graphql.module';
 import { DocInviteDialogComponent } from './components/doc-invite-dialog/doc-invite-dialog.component';
+import { QuillWrapperComponent } from './components/quill-wrapper/quill-wrapper.component';
+import { CodeMirrorWrapperComponent } from './components/code-mirror-wrapper/code-mirror-wrapper.component';
 
 const config: SocketIoConfig = { 
   url: backendRootUrl, 
@@ -60,6 +63,8 @@ const appRoutes: Routes = [
     RegistrationAreaComponent,
     DocumentEditorsListComponent,
     DocInviteDialogComponent,
+    QuillWrapperComponent,
+    CodeMirrorWrapperComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -81,7 +86,8 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes, { enableTracing: false }),
     SocketIoModule.forRoot(config),
     BrowserAnimationsModule,
-    GraphQLModule
+    GraphQLModule,
+    CodemirrorModule
   ],
   providers: [
     CookieService

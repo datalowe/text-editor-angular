@@ -5,13 +5,24 @@ export interface TextDocument {
     title: string,
     body: string,
     owner: Editor,
-    editors: Editor[]
+    editors: Editor[],
+    type: "regular" | "code"
 }
 
-export const emptyDoc: TextDocument = {
+const emptyDocBasis = {
     id: '',
     title: '',
     body: '',
     owner: {username: '', id: ''},
-    editors: []
+    editors: [],
+};
+
+export const regularEmptyDoc: TextDocument = {
+    ...emptyDocBasis,
+    type: "regular"
+};
+
+export const codeEmptyDoc: TextDocument = {
+    ...emptyDocBasis,
+    type: "code"
 };

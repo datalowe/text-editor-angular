@@ -1,0 +1,22 @@
+.run-code-btn {
+    vertical-align: text-bottom;
+
+    .run-icon {
+        border: solid #7c4dff;
+        border-radius: 50%;
+        transform: scale(2);
+    }
+}
+
+.run-code-wrapper {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+}
+
+.code-output {
+    padding: 1rem;
+    margin-top: 1rem;
+    border: solid #555 0.05rem;
+    box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.2);
+}

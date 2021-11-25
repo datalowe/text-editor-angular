@@ -1,0 +1,10 @@
+<quill-editor 
+#editor 
+id="#editor"
+[(ngModel)]="activeDoc.body"
+[modules]="editorModules"
+class="custom-quill-editor"
+(keyup)="updateText()"
+(onEditorCreated)="editorSetupAfterCreation($event)"
+scrollingContainer="body">
+</quill-editor>

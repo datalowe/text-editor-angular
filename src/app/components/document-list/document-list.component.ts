@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { TextDocument } from 'src/app/interfaces/TextDocument';
+import { DocumentService } from 'src/app/services/document.service';
 
 @Component({
   selector: 'app-document-list',
@@ -12,12 +13,18 @@ export class DocumentListComponent implements OnInit {
 
   @Output() onSelectDoc = new EventEmitter();
 
-  constructor() { }
+  constructor(private documentService: DocumentService) { }
 
   ngOnInit(): void {
   }
 
   onClickDoc(document: TextDocument): void {
     this.onSelectDoc.emit(document);
+  }
+
+  getCurrentModeDocs(): TextDocument[] {
+    const currentDocType = this.documentService.isCodeModeOn() ? "code" : "regular";
+
+    return this.documents.filter(d => d.type === currentDocType);
   }
 }
