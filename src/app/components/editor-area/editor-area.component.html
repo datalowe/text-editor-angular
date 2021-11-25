@@ -2,8 +2,8 @@
     <app-editor-toolbar 
         [documents]="savedDocs"
         (saveSignal)="saveText()"
-        (onChangeDoc)="changeDoc($event)"
-        (onNewDoc)="newDoc()">
+        (docChange)="changeDoc($event)"
+        (genNewDoc)="newDoc()">
     </app-editor-toolbar>
     <app-document-editors-list></app-document-editors-list>
     <mat-card class="doc-title-pdf-wrapper" color="primary">

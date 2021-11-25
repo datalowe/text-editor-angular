@@ -41,10 +41,10 @@ fdescribe('DocumentListComponent', () => {
     // fixture.detectChanges();
   });
 
-  it('raises the onSelectDoc event when embedded document list item is clicked', () => {
+  it('raises the docSelection event when embedded document list item is clicked', () => {
     // TODO check that the correct
     // document is passed on through event.
-    // comp.onSelectDoc.pipe(first()).subscribe((selectedDoc: TextDocument) => expect(selectedDoc).toBe(testDoc));
+    // comp.docSelection.pipe(first()).subscribe((selectedDoc: TextDocument) => expect(selectedDoc).toBe(testDoc));
     // comp.onClickDoc(testDoc);
     fixture
   })

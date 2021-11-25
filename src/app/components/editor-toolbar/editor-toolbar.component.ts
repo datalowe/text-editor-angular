@@ -14,8 +14,8 @@ export class EditorToolbarComponent implements OnInit {
 
   @Input() documents: TextDocument[] = [];
   @Output() saveSignal = new EventEmitter();
-  @Output() onChangeDoc = new EventEmitter();
-  @Output() onNewDoc = new EventEmitter();
+  @Output() docChange = new EventEmitter();
+  @Output() genNewDoc = new EventEmitter();
 
   showDocList: boolean = false;
   subscription: Subscription; 
@@ -36,11 +36,11 @@ export class EditorToolbarComponent implements OnInit {
   }
 
   newDoc(): void {
-    this.onNewDoc.emit();
+    this.genNewDoc.emit();
   }
 
   changeDoc(document: TextDocument): void {
-    this.onChangeDoc.emit(document);
+    this.docChange.emit(document);
   }
 
   toggleShowList(): void {

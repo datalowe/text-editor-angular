@@ -56,21 +56,21 @@ import { EditorToolbarComponent } from './editor-toolbar.component';
 //   );
 
 //   it('should emit newDoc event when new document button is clicked', fakeAsync( () => {
-//     spyOn(component.onNewDoc, 'emit');
+//     spyOn(component.genNewDoc, 'emit');
 //     const button = de.nativeElement.querySelector('#new-doc-btn');
 
 //     button.firstChild.click();
 //     tick(1);
-//     expect(component.onNewDoc.emit).toHaveBeenCalled();
+//     expect(component.genNewDoc.emit).toHaveBeenCalled();
 //   })
 //   );
 
-//   it('should emit onChangeDoc event with correct document when changeDoc is triggered', fakeAsync( () => {
-//     spyOn(component.onChangeDoc, 'emit');
+//   it('should emit docChange event with correct document when changeDoc is triggered', fakeAsync( () => {
+//     spyOn(component.docChange, 'emit');
 //     component.changeDoc(filledDoc);
 //     tick(1);
 
-//     expect(component.onChangeDoc.emit).toHaveBeenCalledWith(filledDoc);
+//     expect(component.docChange.emit).toHaveBeenCalledWith(filledDoc);
 //   })
 //   );
 

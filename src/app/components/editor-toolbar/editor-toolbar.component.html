@@ -37,6 +37,6 @@
         *ngIf="showDocList" 
         class="document-list" 
         [documents]="documents" 
-        (onSelectDoc)="changeDoc($event)">
+        (docSelection)="changeDoc($event)">
     </app-document-list>
 </div>

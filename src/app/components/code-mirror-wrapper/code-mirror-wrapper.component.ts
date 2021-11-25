@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { regularEmptyDoc, TextDocument } from 'src/app/interfaces/TextDocument';
 import { DocumentService } from 'src/app/services/document.service';
@@ -18,7 +18,7 @@ const httpOptions = {
   templateUrl: './code-mirror-wrapper.component.html',
   styleUrls: ['./code-mirror-wrapper.component.scss']
 })
-export class CodeMirrorWrapperComponent implements OnInit {
+export class CodeMirrorWrapperComponent implements OnInit, AfterViewInit {
   activeDocSubscription: Subscription;
   activeDoc: TextDocument = {
     ...regularEmptyDoc

@@ -11,7 +11,7 @@ import { DocumentService } from 'src/app/services/document.service';
 export class DocumentListComponent implements OnInit {
   @Input() documents: TextDocument[] = [];
 
-  @Output() onSelectDoc = new EventEmitter();
+  @Output() docSelection = new EventEmitter();
 
   constructor(private documentService: DocumentService) { }
 
@@ -19,7 +19,7 @@ export class DocumentListComponent implements OnInit {
   }
 
   onClickDoc(document: TextDocument): void {
-    this.onSelectDoc.emit(document);
+    this.docSelection.emit(document);
   }
 
   getCurrentModeDocs(): TextDocument[] {
