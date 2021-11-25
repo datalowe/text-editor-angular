@@ -133,6 +133,15 @@
               "devServerTarget": "text-editor:serve:production"
             }
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     }
@@ -142,5 +151,8 @@
       "style": "scss"
     }
   },
-  "defaultProject": "text-editor"
+  "defaultProject": "text-editor",
+  "cli": {
+    "defaultCollection": "@angular-eslint/schematics"
+  }
 }

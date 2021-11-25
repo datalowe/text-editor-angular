@@ -11,7 +11,8 @@
     "deploy": "ng build --base-href './' && rsync -av --delete dist/text-editor/ loal20@ssh.student.bth.se:www/editor",
     "e2e": "ng e2e",
     "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
+    "cypress:run": "cypress run",
+    "lint": "ng lint"
   },
   "private": true,
   "dependencies": {
@@ -43,13 +44,21 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~12.2.4",
+    "@angular-eslint/builder": "12.7.0",
+    "@angular-eslint/eslint-plugin": "12.7.0",
+    "@angular-eslint/eslint-plugin-template": "12.7.0",
+    "@angular-eslint/schematics": "12.7.0",
+    "@angular-eslint/template-parser": "12.7.0",
     "@angular/cli": "~12.2.4",
     "@angular/compiler-cli": "~12.2.0",
     "@cypress/schematic": "^1.5.1",
     "@types/jasmine": "~3.8.0",
     "@types/node": "^12.11.1",
+    "@typescript-eslint/eslint-plugin": "4.28.2",
+    "@typescript-eslint/parser": "4.28.2",
     "coveralls": "^3.1.1",
     "cypress": "8.4.0",
+    "eslint": "^7.26.0",
     "jasmine-core": "~3.8.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",
