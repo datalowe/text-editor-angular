@@ -14,6 +14,6 @@ install:
   - npm install
 
 script:
-  # - npm run test-travis -- --no-watch --no-progress --browsers=ChromeHeadlessCI
+  - npm run test-travis -- --no-watch --no-progress --browsers=ChromeHeadlessCI
   - npm start & wait-on http://localhost:4200
   - npm run cypress:run
