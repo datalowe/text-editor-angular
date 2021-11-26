@@ -9,9 +9,9 @@ The app has a Quill editor which you can use as a regular text editor, and some 
 You can see the app in production [here](https://datalowe.com/text-editor/).
 
 ## Deployment
-`cd` to this directory and run `ng build` to build the project. 
+`cd` to this directory and run `ng build --prod=true` to build the project. 
 
-Once you've run `ng build`, you can either serve the files in `dist/text-editor`, or you can build a Docker image using this directory's Dockerfile by running eg `sudo docker build -t text-editor-angular`. This image can then be used to generate Docker containers which use [nginx](https://nginx.org/) to serve the application on (container) port 80. To make the app available on the host computer ('localhost'), on say port 5555 you can run something like `docker run -p 5555:80 -d --name texted-angular text-editor-angular`. 
+Once you've run `ng build`, you can either serve the files in `dist/text-editor`, or you can build a Docker image using this directory's Dockerfile by running eg `sudo docker build -t text-editor-angular .`. This image can then be used to generate Docker containers which use [nginx](https://nginx.org/) to serve the application on (container) port 80. To make the app available on the host computer ('localhost'), on say port 5555 you can run something like `docker run -p 5555:80 -d --name texted-angular text-editor-angular`. 
 
 __Note__ that if you want to use a reverse proxy with the Docker container, and in many other situations, you might need to add the `--deploy-url` (for changing generated asset URL's) and/or `--base-href` (for changing routing URL's) flags to the `ng build` command. For more information, please see the official [Angular docs on deployment](https://angular.io/guide/deployment#the-deploy-url).
 
