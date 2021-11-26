@@ -8,12 +8,13 @@ addons:
 cache:
   directories:
      - ./node_modules
-     - /home/travis/.cache/Cypress
+    #  - /home/travis/.cache/Cypress
 
 install:
   - npm install
 
 script:
+  - cypress cache clear
   - npm run test-travis -- --no-watch --no-progress --browsers=ChromeHeadlessCI
   - npm start & wait-on http://localhost:4200
   - npm run cypress:run
