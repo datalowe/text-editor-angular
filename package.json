@@ -12,7 +12,8 @@
     "e2e": "ng e2e",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "cypress:verify": "cypress verify"
   },
   "private": true,
   "dependencies": {
