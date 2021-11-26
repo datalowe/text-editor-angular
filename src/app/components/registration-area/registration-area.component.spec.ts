@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RegistrationAreaComponent } from './registration-area.component';
 
-describe('RegistrationAreaComponent', () => {
+xdescribe('RegistrationAreaComponent', () => {
   let component: RegistrationAreaComponent;
   let fixture: ComponentFixture<RegistrationAreaComponent>;
 

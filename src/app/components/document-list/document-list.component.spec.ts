@@ -19,7 +19,7 @@ documentServiceStub = {
   isCodeModeOn: () => false
 };
 
-fdescribe('DocumentListComponent', () => {
+xdescribe('DocumentListComponent', () => {
   let fixture: ComponentFixture<DocumentListComponent>;
 
   beforeEach(async () => {
