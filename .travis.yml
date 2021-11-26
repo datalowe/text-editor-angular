@@ -14,7 +14,6 @@ install:
   - npm install
 
 script:
-  - cypress cache clear
   - npm run test-travis -- --no-watch --no-progress --browsers=ChromeHeadlessCI
   - npm start & wait-on http://localhost:4200
   # try to verify cypress installation, as there have been issues with Cypress on Travis
