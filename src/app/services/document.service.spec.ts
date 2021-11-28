@@ -1,5 +1,6 @@
-import { HttpClientModule } from '@angular/common/http';
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { DocumentService } from './document.service';
 
@@ -17,29 +18,27 @@ import { TextDocument } from '../interfaces/TextDocument';
 //   body: 'filled-body'
 // };
 
-// describe('DocumentService', () => {
-//   let service: DocumentService;
-//   let httpClientSpy: { post: jasmine.Spy, put: jasmine.Spy };
-//   let docService: DocumentService;
+xdescribe('DocumentService', () => {
+  let service: DocumentService;
+  let httpController: HttpTestingController;
 
-//   beforeEach(async () => {
-//     await TestBed.configureTestingModule({
-//       imports: [
-//         HttpClientModule
-//       ]
-//     });
-//   });
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule
+      ],
+      providers: [
+          DocumentService
+      ]
+    });
 
-//   beforeEach(() => {
-//     TestBed.configureTestingModule({});
-//     service = TestBed.inject(DocumentService);
-//     httpClientSpy = jasmine.createSpyObj('HttpClient', ['post', 'put']);
-//     docService = new DocumentService(httpClientSpy as any);
-//   });
+    service = TestBed.inject(DocumentService);
+    httpController = TestBed.inject(HttpTestingController);
+  });
 
-//   it('should be created', () => {
-//     expect(service).toBeTruthy();
-//   });
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
 
 //   it('#createDocument should call httpClient post with just title and body of empty doc', (done: DoneFn) => {
 //     const idDoc: TextDocument = {
@@ -130,4 +129,4 @@ import { TextDocument } from '../interfaces/TextDocument';
 //       .toBe(1);
 //   })
 //   );
-// });
+});

@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
+import { TextDocument } from '../interfaces/TextDocument';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UiService {
   private showDocList: boolean = false;
-  private subject: Subject<any> = new Subject<any>();
+  private subject: Subject<boolean> = new Subject<boolean>();
 
   constructor() { }
 
