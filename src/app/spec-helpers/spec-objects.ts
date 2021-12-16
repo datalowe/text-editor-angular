@@ -19,10 +19,10 @@ export const testDocCode: TextDocument = {
 };
 
 export const testDocEmptyReg: TextDocument = {
-  id: 'abcdefghijklmnopqrstuvwx',
-  title: 'test-title',
-  body: 'test-body',
-  editors: [{id: '1', username: 'a'}],
+  id: '',
+  title: '',
+  body: '',
+  editors: [],
   owner: {id: '3', username: 'ba'},
   type: 'regular'
 };

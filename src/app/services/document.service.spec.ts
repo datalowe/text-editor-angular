@@ -6,35 +6,61 @@ import { Socket } from 'ngx-socket-io';
 
 import { DocumentService } from './document.service';
 
-// import { TextDocument } from '../interfaces/TextDocument';
-
 import { testDocReg, testDocCode, testDocEmptyReg } from 'src/app/spec-helpers/spec-objects';
 
-// import { Apollo, QueryRef } from 'apollo-angular';
 import {
   ApolloTestingModule,
   ApolloTestingController,
 } from 'apollo-angular/testing';
 
-// import { ApolloQueryResult, ObservableQuery } from '@apollo/client/core';
-// import { of } from 'rxjs';
-
 import { GQL_CREATE_NEW_DOCUMENT, GQL_GET_ALL_DOCUMENTS, GQL_GET_EDITORS, GQL_UPDATE_DOCUMENT } from '../graphql/graphql-queries';
-import { TextDocument } from '../interfaces/TextDocument';
-import { forkJoin } from 'rxjs';
+import { regularEmptyDoc, TextDocument } from '../interfaces/TextDocument';
 import { AuthService } from './auth.service';
+import { GraphQLError } from 'graphql';
+import { ApolloError } from '@apollo/client/errors';
+import { Editor } from '../interfaces/Editor';
 
-// const regularEmptyDoc: TextDocument = {
-//   id: '',
-//   title: '',
-//   body: ''
-// };
+const graphQLErrors = [
+  new GraphQLError('Something went wrong with GraphQL'),
+  new GraphQLError('Something else went wrong with GraphQL'),
+];
+const networkError = new Error('Network error');
+const errorMessage = 'this is an error message';
+const apolloError = new ApolloError({
+  graphQLErrors: graphQLErrors,
+  networkError: networkError,
+  errorMessage: errorMessage,
+});
 
-// const filledDoc: TextDocument = {
-//   id: 'abcdefghijklmnopqrstuvwx',
-//   title: 'filled-title',
-//   body: 'filled-body'
-// };
+const sampleCreateResp = {
+  "data": {
+      "createDocument": {
+          "title": "qew",
+          "body": "<p>rqe</p>",
+          "ownerId": "617baa6ec5f1a2d4ffb247cd",
+          "editorIds": [],
+          "owner": {
+              "username": "lowe"
+          },
+          "editors": []
+      }
+  }
+};
+
+const sampleUpdateResp = {
+  "data": {
+      "updateDocument": {
+          "title": "lowedoc",
+          "body": "<p>test test</p><p><br></p><p><span style=\"background-color: rgba(156, 39, 176, 0.4);\" comment-id=\"772833\" comment-text=\"wrwrqqanother\" onclick=\"showCommentEditor(this)\">comm</span></p><p><br></p><p>test</p><p><br></p><p>afaba</p>",
+          "ownerId": "617baa6ec5f1a2d4ffb247cd",
+          "editorIds": [],
+          "owner": {
+              "username": "lowe"
+          },
+          "editors": []
+      }
+  }
+};
 
 describe('DocumentService', () => {
   let apolloController: ApolloTestingController;
@@ -42,7 +68,6 @@ describe('DocumentService', () => {
   let socketService: Socket;
   let authService: AuthService;
   let httpController: HttpTestingController;
-  // let apolloService: jasmine.SpyObj<Apollo>;
 
   beforeEach(() => {
     socketService = jasmine.createSpyObj<Socket>(
@@ -54,8 +79,6 @@ describe('DocumentService', () => {
       {'getOwnUserId': '1'}
     );
 
-    // spyOn(apolloService, 'watchQuery').and.returnValue(3);
-
     TestBed.configureTestingModule({
       imports: [
         ApolloTestingModule,
@@ -63,8 +86,7 @@ describe('DocumentService', () => {
       ],
       providers: [
           DocumentService,
-          { provide: Socket, useValue: socketService},
-          // { provide: Apollo, useValue: apolloService}
+          { provide: Socket, useValue: socketService}
       ]
     });
 
@@ -109,6 +131,34 @@ describe('DocumentService', () => {
     expect(matchDoc).toBeTruthy();
   });
 
+  it('#startDocumentsSubscription does not emit invalid returned data', async () => {
+    let emptyArr: any[] = [];
+    let activeDocs: TextDocument[] = emptyArr;
+
+    const docUpdateObservable = service.onAllDocsUpdate();
+
+    docUpdateObservable.subscribe(
+        data => {
+          activeDocs = data;
+        }
+    );
+
+    service.startDocumentsSubscription();
+
+    const op = apolloController.expectOne(GQL_GET_ALL_DOCUMENTS);
+
+    op.flush({
+      data: {
+        nonsense: ['foo', 'bar']
+      },
+    });
+
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+    expect(activeDocs).toEqual(emptyArr);
+  });
+  
+
   it('#createDocument triggers post request and document refresh', async () => {
     const refreshSpy = spyOn(service, 'refreshAllDocs');
 
@@ -116,79 +166,187 @@ describe('DocumentService', () => {
 
     const op = apolloController.expectOne(GQL_CREATE_NEW_DOCUMENT);
 
-    op.flush({
-      data: {
-        status: 'good'
-      },
-    });
+    op.flush(sampleCreateResp);
 
     await new Promise(resolve => setTimeout(resolve, 0));
 
     expect(refreshSpy).toHaveBeenCalled();
   });
 
-//   it('#upsertDocument calls #createDocument and in turn httpClient.post when active doc is empty', (done: DoneFn) => {
-//     httpClientSpy.post.and.returnValue(asyncData(regularEmptyDoc));
+  it('#updateActiveTitle updates active doc title and triggers emission of document', async () => {
+    let testDoc: TextDocument = regularEmptyDoc;
+
+    service
+      .onActiveDocUpdate()
+      .subscribe(
+        doc => testDoc = doc
+      );
     
-//     docService.upsertDocument().subscribe(
-//       (doc) => {
-//         expect(doc).toEqual(regularEmptyDoc);
-//         done();
-//       },
-//       done.fail
-//     );
+    service.updateActiveTitle('foo');
 
-//     expect(httpClientSpy.post.calls.count())
-//       .withContext('httpClient.post spy method was called once')
-//       .toBe(1);
-//   });
+    await new Promise(resolve => setTimeout(resolve, 0));
 
-//   it("#updateActiveTitle changes document title and triggers subject event emission", () => {
-//     const testDoc = { ...regularEmptyDoc };
-//     testDoc.title = filledDoc.title;
+    expect(testDoc.title).toEqual('foo');
+  });
 
-//     docService.onActiveDocUpdate().subscribe((doc) => expect(doc).toEqual(testDoc));
-//     docService.updateActiveTitle(testDoc.title);
-//   });
+  it('#updateActiveBody updates active doc body and triggers emission of document locally when id is not set', async () => {
+    let testDoc: TextDocument = regularEmptyDoc;
 
-//   it("#updateActiveBody changes document body and triggers subject event emission", () => {
-//     const testDoc = { ...regularEmptyDoc };
-//     testDoc.body = filledDoc.body;
-
-//     docService.onActiveDocUpdate().subscribe((doc) => expect(doc).toEqual(testDoc));
-//     docService.updateActiveBody(testDoc.body);
-//   });
-
-//   it("#swapActive changes document and triggers subject event emission", () => {
-//     docService.onActiveDocUpdate().subscribe((doc) => expect(doc).toEqual(filledDoc));
-//     docService.swapActive(filledDoc);
-//   });
-
-//   it("#resetActiveDoc makes document return to empty state and triggers subject emission", fakeAsync(() => {
-//     docService.swapActive(filledDoc);
-//     tick(1);
-//     docService.onActiveDocUpdate().subscribe((doc) => expect(doc).toEqual(regularEmptyDoc));
-//     docService.resetActiveDoc();
-//   })
-//   );
-
-//   it('#upsertDocument calls #updateDocument and in turn httpClient.put when active doc is filled', fakeAsync(() => {
-//     httpClientSpy.put.and.returnValue(asyncData(filledDoc));
-//     docService.swapActive(filledDoc);
-//     tick(1);
+    service
+      .onActiveDocUpdate()
+      .subscribe(
+        doc => testDoc = doc
+      );
     
-//     docService.upsertDocument().subscribe(
-//       (doc) => {
-//         expect(doc).toEqual(filledDoc);
-//       },
-//       (error) => {
-//         console.log(error);
-//       }
-//     );
+    service.updateActiveBody('foo');
 
-//     expect(httpClientSpy.put.calls.count())
-//       .withContext('httpClient.post spy method was called once')
-//       .toBe(1);
-//   })
-//   );
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+    expect(testDoc.body).toEqual('foo');
+  });
+
+  it('#updateActiveBody triggers emission of document remotely when id is set', async () => {
+    const updateDocSpy = spyOn(service, 'updateDocument');
+
+    service.swapActive(testDocCode);
+    
+    service.updateActiveBody('foo');
+
+    expect(updateDocSpy).toHaveBeenCalled();
+  });
+
+  it('#swapActive triggers leave room event when document has id', () => {
+    service.swapActive(testDocCode);
+
+    service.swapActive(testDocReg);
+
+    expect(socketService.emit).toHaveBeenCalled();
+  })
+
+  it('#upsertDocument when active doc has no id calls #createDocument', () => {
+    const createDocSpy = spyOn(service, 'createDocument');
+
+    service.swapActive(testDocEmptyReg);
+    service.upsertDocument();
+
+    expect(createDocSpy).toHaveBeenCalled();
+  });
+
+  it('#upsertDocument when active doc has id calls #createDocument', () => {
+    const updateDocSpy = spyOn(service, 'updateDocument');
+
+    service.swapActive(testDocReg);
+    service.upsertDocument();
+
+    expect(updateDocSpy).toHaveBeenCalled();
+  });
+
+  it('#updateDocument sends mutation update query and refreshes documents', async () => {
+    const refreshDocsSpy = spyOn(service, 'refreshAllDocs');
+
+    service.updateDocument();
+
+    const op = apolloController.expectOne(GQL_UPDATE_DOCUMENT);
+
+    op.flush(sampleUpdateResp);
+
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+    expect(refreshDocsSpy).toHaveBeenCalled();
+  });
+
+  it('#updateDocument does not refresh documents when mutation query fails', async () => {
+    const refreshDocsSpy = spyOn(service, 'refreshAllDocs');
+
+    service.updateDocument();
+
+    const op = apolloController.expectOne(GQL_UPDATE_DOCUMENT);
+
+    op.flush(apolloError);
+
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+    expect(refreshDocsSpy).toHaveBeenCalledTimes(0);
+  });
+
+  it('#createDocument does not refresh documents when mutation query fails', async () => {
+    const refreshDocsSpy = spyOn(service, 'refreshAllDocs');
+
+    service.createDocument();
+    apolloController.expectOne(GQL_CREATE_NEW_DOCUMENT).flush(apolloError);
+    await new Promise(resolve => setTimeout(resolve, 0));
+    expect(refreshDocsSpy).toHaveBeenCalledTimes(0);
+  });
+
+  it('#startEditorsSubscription updates and emits editors', async () => {
+    let testEditors: Editor[] = [];
+
+    service
+      .onEditorsUpdate()
+      .subscribe(
+        editors => testEditors = editors
+      );
+
+    service.startEditorsSubscription();
+    apolloController.expectOne(GQL_GET_EDITORS)
+      .flush({
+        data: {
+          editors: testDocReg.editors
+        },
+      });
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+    expect(testEditors.find(el => el.id == testDocReg.editors[0].id)).toBeTruthy();
+  });
+
+  it('#resetActiveDoc triggers socket leave room event when doc id is non-empty', () => {
+    service.swapActive(testDocReg);
+
+    service.resetActiveDoc();
+
+    expect(socketService.emit).toHaveBeenCalledWith('leaveRoom', testDocReg.id);
+  });
+
+  it('#toggleCodeMode resets active doc to empty code doc if code mode was off', async () => {
+    let testDoc: TextDocument = regularEmptyDoc;
+
+    service
+      .onActiveDocUpdate()
+      .subscribe(
+        doc => testDoc = doc
+      );
+    service.toggleCodeMode();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    expect(testDoc.type).toEqual(testDocCode.type);
+  });
+
+  it('#toggleActiveEditor adds editor when it wasnt there at first', async () => {
+    service.swapActive(testDocEmptyReg);
+
+    service.startEditorsSubscription();
+    apolloController.expectOne(GQL_GET_EDITORS)
+      .flush({
+        data: {
+          editors: testDocReg.editors
+        },
+      });
+    await new Promise(resolve => setTimeout(resolve, 0));
+    apolloController.verify();
+
+    let testDoc: TextDocument = testDocEmptyReg;
+
+    service
+      .onActiveDocUpdate()
+      .subscribe(
+        doc => testDoc = doc
+      );
+    service.toggleActiveEditor(testDocReg.editors[0].id);
+
+    apolloController.expectOne(GQL_CREATE_NEW_DOCUMENT)
+    .flush(sampleCreateResp);
+    spyOn(service, 'refreshAllDocs');
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+    expect(testDoc.editors.find(el => el.id == testDocReg.editors[0].id)).toBeTruthy();
+  });
 });
