@@ -184,7 +184,7 @@ export class DocumentService {
     return this.allDocsSubject.asObservable();
   }
 
-  onEditorsUpdate(): Observable<any> {
+  onEditorsUpdate(): Observable<Editor[]> {
     return this.editorsSubject.asObservable();
   }
 }

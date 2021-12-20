@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TextDocument } from 'src/app/interfaces/TextDocument';
 import { DocumentService } from 'src/app/services/document.service';
 
 import { DocumentListComponent } from './document-list.component';
