@@ -32,13 +32,14 @@
                     required
                     minlength=6>
             </mat-form-field>
-            <mat-checkbox gdGridAlign="center center" (click)="toggleShowPassword()">Show</mat-checkbox>
+            <mat-checkbox gdGridAlign="center center" data-testid="password-toggle-check" (click)="toggleShowPassword()">Show</mat-checkbox>
             </div>
             <button 
                 id="register-btn" 
                 mat-raised-button 
                 color="accent" 
-                name="login-btn" 
+                name="login-btn"
+                data-testid="register-button"
                 type="submit">
                 Register
             </button>

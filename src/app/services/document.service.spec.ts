@@ -67,7 +67,6 @@ describe('DocumentService', () => {
   let service: DocumentService;
   let socketService: Socket;
   let authService: AuthService;
-  let httpController: HttpTestingController;
 
   beforeEach(() => {
     socketService = jasmine.createSpyObj<Socket>(
@@ -92,7 +91,6 @@ describe('DocumentService', () => {
 
     service = TestBed.inject(DocumentService);
     apolloController = TestBed.inject(ApolloTestingController);
-    httpController = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {
