@@ -10,8 +10,6 @@ This is an [Angular](https://angular.io) project which uses the [Quill Editor](h
 
 The app has a Quill editor which you can use as a regular text editor, and some buttons. The 'save' button sends new/updated documents to the backend/database. The 'list' button brings up selectable previously saved documents. The 'new' button clears title and text input fields. Using socket.io, all document body text updates are broadcast to all other clients using the text editor and working on the same document. The editor also includes a 'code mode', which allows writing pieces of code and having a separate service run them to see what output they produce.
 
-You can see the app in production [here](https://datalowe.com/text-editor/).
-
 ## Deployment
 `cd` to this directory and run `ng build` to build the project. 
 
